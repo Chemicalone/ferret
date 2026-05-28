@@ -1191,7 +1191,7 @@ const ACTIONS = {
 
 window.doAction = function(action) {
   if (isDead && action !== 'medicine') {
-    showNotif('💀 Fifi è morto! Dagli le medicine!');
+    showNotif('💀 Pan è morto! Dagli le medicine!');
     return;
   }
 
@@ -1202,10 +1202,10 @@ window.doAction = function(action) {
 
   if (action === 'sleep') {
     newState.sleeping = !petState.sleeping;
-    showNotif(newState.sleeping ? '💤 Fifi sta dormendo...' : '☀️ Fifi si è svegliato!');
+    showNotif(newState.sleeping ? '💤 Pan sta dormendo...' : '☀️ Pan si è svegliato!');
   } else {
     if (petState.sleeping && action !== 'medicine') {
-      showNotif('😴 Fifi sta dormendo! Sveglialo prima.');
+      showNotif('😴 Pan sta dormendo! Sveglialo prima.');
       return;
     }
     for (const [key, val] of Object.entries(act)) {
@@ -1217,7 +1217,7 @@ window.doAction = function(action) {
     if (isDead && action === 'medicine') {
       newState.dead = false;
       newState.mood = 30; newState.hunger = 30; newState.energy = 30;
-      showNotif('💊 Fifi è tornato in vita!');
+      showNotif('💊 Pan è tornato in vita!');
     } else {
       showNotif('✨ ' + act.msg);
     }
@@ -1343,7 +1343,7 @@ function checkAutoSleep() {
     label.textContent = `⚠️ NANNA TRA ${minsUntilSleep} MIN`;
     label.classList.add('soon');
   } else if (totalMin >= sleepMin || totalMin < wakeMin) {
-    label.textContent = `💤 FIFI STA DORMENDO`;
+    label.textContent = `💤 PAN STA DORMENDO`;
     label.classList.add('soon');
   } else {
     label.textContent = `💤 NANNA ALLE 19:30`;
@@ -1357,8 +1357,8 @@ function checkAutoSleep() {
       const newState = { ...petState, sleeping: true, lastUpdate: Date.now() };
       petState = newState;
       set(petRef, newState);
-      pushChatMsg('🤖 Sistema', '💤 Sono le 19:30 — Fifi va a nanna automaticamente! Buonanotte~ 🌙', 'system');
-      showNotif('🌙 Fifi va a nanna automaticamente!');
+      pushChatMsg('🤖 Sistema', '💤 Sono le 19:30 — Pan va a nanna automaticamente! Buonanotte~ 🌙', 'system');
+      showNotif('🌙 Pan va a nanna automaticamente!');
     }
   }
 
@@ -1369,8 +1369,8 @@ function checkAutoSleep() {
       const newState = { ...petState, sleeping: false, lastUpdate: Date.now() };
       petState = newState;
       set(petRef, newState);
-      pushChatMsg('🤖 Sistema', '☀️ Sono le 7:30 — Fifi si sveglia riposato! Buongiorno~ 🌅', 'system');
-      showNotif('☀️ Fifi si è svegliato!');
+      pushChatMsg('🤖 Sistema', '☀️ Sono le 7:30 — Pan si sveglia riposato! Buongiorno~ 🌅', 'system');
+      showNotif('☀️ Pan si è svegliato!');
     }
   }
 }
@@ -1393,8 +1393,8 @@ let mgTimerStart = 0;
 let mgAnswered   = false;
 
 window.startMinigame = function() {
-  if (isDead) { showNotif('💀 Fifi è morto! Dagli le medicine!'); return; }
-  if (petState && petState.sleeping) { showNotif('😴 Fifi sta dormendo!'); return; }
+  if (isDead) { showNotif('💀 Pan è morto! Dagli le medicine!'); return; }
+  if (petState && petState.sleeping) { showNotif('😴 Pan sta dormendo!'); return; }
 
   mgRound  = 0;
   mgScore  = 0;
@@ -1504,7 +1504,7 @@ function mgEnd() {
   startAnim();
 
   const nick = document.getElementById('nickInput').value.trim() || 'Anonimo';
-  pushChatMsg(nick, `🎮 ha giocato con Fifi! [${mgScore}/${MG_ROUNDS}] +${funBonus} divertimento`, 'action');
+  pushChatMsg(nick, `🎮 ha giocato con Pan! [${mgScore}/${MG_ROUNDS}] +${funBonus} divertimento`, 'action');
 };
 
 window.closeMinigame = function() {
