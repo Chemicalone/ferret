@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐾 Furetto Tamagochi</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a1a;
+    --panel: #12122a;
+    --panel2: #1a1a35;
+    --border: #2a2a5a;
+    --accent: #7c5cbf;
+    --accent2: #c084fc;
+    --gold: #fbbf24;
+    --green: #4ade80;
+    --red: #f87171;
+    --blue: #60a5fa;
+    --pink: #f472b6;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --glow: rgba(124,92,191,0.35);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 12px;
+    background-image:
+      radial-gradient(ellipse at 20% 10%, rgba(124,92,191,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 90%, rgba(192,132,252,0.08) 0%, transparent 60%);
+  }
+
+  h1 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 18px;
+    color: var(--accent2);
+    text-shadow: 0 0 20px var(--glow), 2px 2px 0 #3b0764;
+    margin-bottom: 6px;
+    letter-spacing: 2px;
+  }
+
+  .subtitle {
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    color: var(--muted);
+    margin-bottom: 24px;
+    letter-spacing: 3px;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 20px;
+    width: 100%;
+    max-width: 900px;
+  }
+
+  .left-col { display: flex; flex-direction: column; gap: 16px; }
+  .right-col { display: flex; flex-direction: column; gap: 16px; }
+
+  /* ---- DEVICE ---- */
+  .device {
+    background: var(--panel);
+    border: 2px solid var(--border);
+    border-radius: 24px 24px 40px 40px;
+    padding: 20px 16px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 0 40px rgba(124,92,191,0.2), inset 0 1px 0 rgba(255,255,255,0.05);
+    position: relative;
+  }
+
+  .screen {
+    width: 240px;
+    height: 220px;
+    background: #0d1117;
+    border: 3px solid #1e1e3a;
+    border-radius: 12px;
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.8), 0 0 20px rgba(124,92,191,0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 18px;
+  }
+
+  .screen::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 50%);
+    pointer-events: none;
+    border-radius: 10px;
+  }
+
+  /* ---- PIXEL ART FURETTO ---- */
+  .ferret-container {
+    position: relative;
+    width: 120px;
+    height: 100px;
+  }
+
+  canvas#ferret {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    width: 120px;
+    height: 100px;
+  }
+
+  .emotion-bubble {
+    position: absolute;
+    top: -22px;
+    right: -10px;
+    font-size: 18px;
+    animation: bobble 1.5s ease-in-out infinite;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+  }
+
+  @keyframes bobble {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-4px) rotate(5deg); }
+  }
+
+  .screen-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 100%, rgba(124,92,191,0.07) 0%, transparent 70%);
+  }
+
+  .pet-name {
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    color: var(--accent2);
+    margin-top: 6px;
+    letter-spacing: 2px;
+  }
+
+  .visitors-badge {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    color: var(--gold);
+    background: rgba(251,191,36,0.1);
+    border: 1px solid rgba(251,191,36,0.3);
+    border-radius: 20px;
+    padding: 2px 8px;
+  }
+
+  /* ---- BUTTONS ---- */
+  .buttons-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    width: 100%;
+  }
+
+  .btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    padding: 8px 4px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    background: var(--panel2);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.1s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    line-height: 1.6;
+    text-align: center;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+
+  .btn span.icon { font-size: 16px; }
+
+  .btn:hover {
+    background: var(--accent);
+    border-color: var(--accent2);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(124,92,191,0.4);
+  }
+
+  .btn:active { transform: translateY(0); box-shadow: none; }
+
+  .btn.feed { border-color: rgba(74,222,128,0.4); }
+  .btn.feed:hover, .btn.feed:active { background: #166534; border-color: var(--green); }
+  .btn.play { border-color: rgba(96,165,250,0.4); }
+  .btn.play:hover, .btn.play:active { background: #1e3a5f; border-color: var(--blue); }
+  .btn.sleep { border-color: rgba(251,191,36,0.4); }
+  .btn.sleep:hover, .btn.sleep:active { background: #713f12; border-color: var(--gold); }
+  .btn.clean { border-color: rgba(244,114,182,0.4); }
+  .btn.clean:hover, .btn.clean:active { background: #831843; border-color: var(--pink); }
+  .btn.medicine { border-color: rgba(248,113,113,0.4); }
+  .btn.medicine:hover, .btn.medicine:active { background: #7f1d1d; border-color: var(--red); }
+  .btn.pet { border-color: rgba(192,132,252,0.4); }
+  .btn.pet:hover, .btn.pet:active { background: #4c1d95; border-color: var(--accent2); }
+
+  /* ---- STATS ---- */
+  .stats-panel {
+    background: var(--panel);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    padding: 14px;
+  }
+
+  .stats-title {
+    font-size: 8px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+
+  .stat-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .stat-icon { font-size: 14px; width: 20px; text-align: center; }
+
+  .stat-label {
+    font-size: 7px;
+    color: var(--muted);
+    width: 58px;
+    flex-shrink: 0;
+  }
+
+  .stat-bar-bg {
+    flex: 1;
+    height: 10px;
+    background: #0d0d1f;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .stat-bar {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 0.6s ease;
+    position: relative;
+  }
+
+  .stat-bar::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 40%;
+    background: rgba(255,255,255,0.2);
+    border-radius: 5px 5px 0 0;
+  }
+
+  .stat-val {
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    width: 28px;
+    text-align: right;
+    color: var(--text);
+  }
+
+  /* ---- CHAT ---- */
+  .chat-panel {
+    background: var(--panel);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 400px;
+  }
+
+  .chat-title {
+    font-size: 8px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .online-dot {
+    width: 7px; height: 7px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: 0 0 6px var(--green);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-right: 4px;
+    margin-bottom: 12px;
+    scroll-behavior: smooth;
+  }
+
+  .messages::-webkit-scrollbar { width: 4px; }
+  .messages::-webkit-scrollbar-track { background: transparent; }
+  .messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .msg {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .msg-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .msg-author {
+    font-size: 7px;
+    color: var(--accent2);
+  }
+
+  .msg-time {
+    font-family: 'VT323', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .msg-text {
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    color: var(--text);
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    border-radius: 0 8px 8px 8px;
+    padding: 6px 10px;
+    word-break: break-word;
+    line-height: 1.4;
+  }
+
+  .msg.system .msg-text {
+    color: var(--gold);
+    background: rgba(251,191,36,0.07);
+    border-color: rgba(251,191,36,0.2);
+    text-align: center;
+    border-radius: 8px;
+    font-size: 13px;
+  }
+
+  .msg.action .msg-text {
+    color: var(--accent2);
+    background: rgba(192,132,252,0.07);
+    border-color: rgba(192,132,252,0.2);
+    border-radius: 8px;
+    font-style: italic;
+    font-size: 13px;
+  }
+
+  .chat-input-row {
+    display: flex;
+    gap: 8px;
+    flex-direction: column;
+  }
+
+  .nick-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .nick-label {
+    font-size: 7px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .nick-input {
+    flex: 1;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 16px;
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    padding: 6px 8px;
+    outline: none;
+  }
+
+  .nick-input:focus { border-color: var(--accent); }
+
+  .msg-row {
+    display: flex;
+    gap: 8px;
+  }
+
+  .msg-input {
+    flex: 1;
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    padding: 8px 10px;
+    outline: none;
+    resize: none;
+    height: 40px;
+  }
+
+  .msg-input:focus { border-color: var(--accent); }
+
+  .send-btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    padding: 0 14px;
+    background: var(--accent);
+    border: 2px solid var(--accent2);
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.1s;
+    white-space: nowrap;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .send-btn:hover, .send-btn:active {
+    background: var(--accent2);
+    box-shadow: 0 0 12px var(--glow);
+  }
+
+  /* ---- NOTIFICATION ---- */
+  #notif {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--panel);
+    border: 2px solid var(--accent);
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 9px;
+    color: var(--accent2);
+    box-shadow: 0 0 20px var(--glow);
+    transition: transform 0.3s ease;
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  #notif.show { transform: translateX(-50%) translateY(0); }
+
+  /* ---- SLEEPING OVERLAY ---- */
+  .zzz {
+    position: absolute;
+    font-family: 'Press Start 2P', monospace;
+    color: var(--blue);
+    font-size: 10px;
+    animation: floatUp 2s ease-in infinite;
+    opacity: 0;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translate(0,0); opacity: 0.8; }
+    100% { transform: translate(10px,-40px); opacity: 0; }
+  }
+
+  /* ---- DEAD OVERLAY ---- */
+  .dead-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 10px;
+    z-index: 10;
+  }
+
+  .dead-overlay .skull { font-size: 32px; }
+  .dead-overlay p { font-size: 8px; color: var(--red); text-align: center; }
+
+  /* ---- MOBILE RESPONSIVE ---- */
+  @media (max-width: 700px) {
+    body { padding: 12px 10px; }
+
+    h1 { font-size: 12px; letter-spacing: 1px; }
+    .subtitle { font-size: 14px; margin-bottom: 14px; }
+
+    .layout {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    /* Device più compatto */
+    .device { padding: 14px 12px 20px; border-radius: 18px 18px 30px 30px; }
+
+    .screen {
+      width: 200px;
+      height: 180px;
+      margin-bottom: 14px;
+    }
+
+    /* Bottoni più alti e comodi da toccare */
+    .btn {
+      padding: 12px 4px;
+      min-height: 52px;
+      font-size: 6px;
+      border-radius: 10px;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    .btn span.icon { font-size: 20px; }
+
+    /* Griglia bottoni più spaziosa */
+    .buttons-row { gap: 6px; }
+
+    /* Stats panel */
+    .stats-panel { padding: 12px 10px; }
+    .stat-label { width: 50px; font-size: 6px; }
+
+    /* Chat più corta su mobile */
+    .chat-panel { min-height: 280px; padding: 12px 10px; }
+
+    /* Input: minimo 16px per evitare zoom iOS */
+    .nick-input {
+      font-size: 16px;
+      padding: 10px 10px;
+    }
+    .msg-input {
+      font-size: 16px;
+      padding: 10px 10px;
+      height: 44px;
+    }
+    .send-btn {
+      font-size: 6px;
+      padding: 0 12px;
+      min-height: 44px;
+    }
+
+    /* Minigioco adattivo */
+    .minigame-box {
+      width: calc(100vw - 32px);
+      max-width: 340px;
+      padding: 20px 16px;
+      gap: 12px;
+    }
+    .mg-display { font-size: 34px; }
+    .mg-key {
+      width: 58px;
+      height: 58px;
+      font-size: 18px;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    .mg-close-btn {
+      min-height: 44px;
+      font-size: 7px;
+      padding: 12px 24px;
+      touch-action: manipulation;
+    }
+  }
+
+  /* Telefoni molto stretti */
+  @media (max-width: 380px) {
+    h1 { font-size: 10px; }
+    .screen { width: 180px; height: 160px; }
+    .btn { font-size: 5px; padding: 10px 2px; min-height: 48px; }
+    .btn span.icon { font-size: 18px; }
+    .mg-key { width: 50px; height: 50px; font-size: 16px; }
+  }
+
+  /* ---- AUTO-SLEEP INDICATOR ---- */
+  .sleep-clock {
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 6px;
+    letter-spacing: 1px;
+  }
+  .sleep-clock.soon {
+    color: var(--gold);
+    animation: pulse 1s infinite;
+  }
+
+  /* ---- MINIGIOCO OVERLAY ---- */
+  #minigameOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+  #minigameOverlay.active { display: flex; }
+
+  .minigame-box {
+    background: var(--panel);
+    border: 3px solid var(--accent);
+    border-radius: 18px;
+    padding: 28px 24px;
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 0 60px rgba(124,92,191,0.5);
+    position: relative;
+  }
+
+  .mg-title {
+    font-size: 10px;
+    color: var(--accent2);
+    letter-spacing: 2px;
+    text-align: center;
+  }
+
+  .mg-subtitle {
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .mg-display {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 42px;
+    color: var(--gold);
+    text-shadow: 0 0 20px rgba(251,191,36,0.6);
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 6px;
+    transition: transform 0.1s;
+  }
+
+  .mg-display.flash {
+    transform: scale(1.3);
+    color: var(--green);
+  }
+
+  .mg-timer-bar-bg {
+    width: 100%;
+    height: 8px;
+    background: #0d0d1f;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .mg-timer-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--gold));
+    border-radius: 4px;
+    transition: width 0.1s linear;
+  }
+
+  .mg-keys {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  .mg-key {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 14px;
+    width: 50px;
+    height: 50px;
+    border: 3px solid var(--border);
+    border-radius: 10px;
+    background: var(--panel2);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+
+  .mg-key.target {
+    border-color: var(--gold);
+    color: var(--gold);
+    box-shadow: 0 0 16px rgba(251,191,36,0.4);
+    animation: mgpulse 0.5s ease-in-out infinite alternate;
+  }
+
+  @keyframes mgpulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.08); }
+  }
+
+  .mg-key.correct {
+    background: #166534;
+    border-color: var(--green);
+    color: var(--green);
+    transform: scale(1.15);
+  }
+
+  .mg-key.wrong {
+    background: #7f1d1d;
+    border-color: var(--red);
+    color: var(--red);
+  }
+
+  .mg-score-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .mg-score-label {
+    font-size: 7px;
+    color: var(--muted);
+  }
+
+  .mg-score-val {
+    font-family: 'VT323', monospace;
+    font-size: 22px;
+    color: var(--accent2);
+  }
+
+  .mg-result {
+    font-family: 'VT323', monospace;
+    font-size: 22px;
+    text-align: center;
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .mg-result.show { display: flex; }
+
+  .mg-close-btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    padding: 10px 20px;
+    background: var(--accent);
+    border: 2px solid var(--accent2);
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.1s;
+  }
+
+  .mg-close-btn:hover {
+    background: var(--accent2);
+    box-shadow: 0 0 12px var(--glow);
+  }
+
+  .mg-round-info {
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<h1>🐾 FURETTINO</h1>
+<p class="subtitle">▸ TAMAGOCHI CONDIVISO ◂</p>
+
+<div class="layout">
+  <!-- LEFT -->
+  <div class="left-col">
+    <div class="device">
+      <div class="visitors-badge" id="visitorsCount">👥 1</div>
+      <div class="screen">
+        <div class="screen-bg"></div>
+        <div class="ferret-container">
+          <canvas id="ferret" width="60" height="50"></canvas>
+          <div class="emotion-bubble" id="emoBubble">😊</div>
+        </div>
+        <div class="pet-name" id="petNameDisplay"></div>
+        <div id="deadOverlay" style="display:none;" class="dead-overlay">
+          <span class="skull">💀</span>
+          <p>È MORTO...</p>
+          <p style="color:var(--muted); font-size:7px;">qualcuno lo riporti in vita!</p>
+        </div>
+      </div>
+      <div class="buttons-row">
+        <button class="btn feed" onclick="doAction('feed')"><span class="icon">🍖</span>MANGIA</button>
+        <button class="btn play" onclick="startMinigame()"><span class="icon">🎾</span>GIOCA</button>
+        <button class="btn sleep" onclick="doAction('sleep')"><span class="icon">💤</span>DORMI</button>
+        <button class="btn clean" onclick="doAction('clean')"><span class="icon">🛁</span>PULISCI</button>
+        <button class="btn medicine" onclick="doAction('medicine')"><span class="icon">💊</span>CURA</button>
+        <button class="btn pet" onclick="doAction('pet')"><span class="icon">🫶</span>COCCOLA</button>
+      </div>
+      <div class="sleep-clock" id="sleepClockLabel">💤 NANNA ALLE 19:30</div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-panel">
+      <div class="stats-title">▸ STATISTICHE</div>
+      <div class="stat-row">
+        <span class="stat-icon">🍖</span>
+        <span class="stat-label">FAME</span>
+        <div class="stat-bar-bg"><div class="stat-bar" id="bar-hunger" style="background:linear-gradient(90deg,#4ade80,#86efac);width:80%"></div></div>
+        <span class="stat-val" id="val-hunger">80</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-icon">⚡</span>
+        <span class="stat-label">ENERGIA</span>
+        <div class="stat-bar-bg"><div class="stat-bar" id="bar-energy" style="background:linear-gradient(90deg,#fbbf24,#fde68a);width:70%"></div></div>
+        <span class="stat-val" id="val-energy">70</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-icon">🎮</span>
+        <span class="stat-label">DIVERT.</span>
+        <div class="stat-bar-bg"><div class="stat-bar" id="bar-fun" style="background:linear-gradient(90deg,#60a5fa,#93c5fd);width:60%"></div></div>
+        <span class="stat-val" id="val-fun">60</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-icon">🛁</span>
+        <span class="stat-label">PULIZIA</span>
+        <div class="stat-bar-bg"><div class="stat-bar" id="bar-clean" style="background:linear-gradient(90deg,#f472b6,#fbcfe8);width:90%"></div></div>
+        <span class="stat-val" id="val-clean">90</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-icon">❤️</span>
+        <span class="stat-label">UMORE</span>
+        <div class="stat-bar-bg"><div class="stat-bar" id="bar-mood" style="background:linear-gradient(90deg,#c084fc,#e9d5ff);width:75%"></div></div>
+        <span class="stat-val" id="val-mood">75</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right-col">
+    <div class="chat-panel">
+      <div class="chat-title">
+        <div class="online-dot"></div>
+        CHAT GLOBALE
+      </div>
+      <div class="messages" id="messages"></div>
+      <div class="chat-input-row">
+        <div class="nick-row">
+          <span class="nick-label">NICK:</span>
+          <input class="nick-input" id="nickInput" maxlength="16" placeholder="il tuo nome..." />
+        </div>
+        <div class="msg-row">
+          <textarea class="msg-input" id="msgInput" placeholder="scrivi un messaggio..."></textarea>
+          <button class="send-btn" onclick="sendMessage()">INVIA</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MINIGIOCO OVERLAY -->
+<div id="minigameOverlay">
+  <div class="minigame-box">
+    <div class="mg-title">🎮 MINI GIOCO</div>
+    <div class="mg-subtitle">Premi il tasto evidenziato!</div>
+    <div class="mg-round-info" id="mgRoundInfo">ROUND 1 / 5</div>
+    <div class="mg-display" id="mgDisplay">?</div>
+    <div class="mg-timer-bar-bg">
+      <div class="mg-timer-bar" id="mgTimerBar" style="width:100%"></div>
+    </div>
+    <div class="mg-keys" id="mgKeys">
+      <button class="mg-key" id="mgKey0" onclick="mgPress(0)">⬅</button>
+      <button class="mg-key" id="mgKey1" onclick="mgPress(1)">⬆</button>
+      <button class="mg-key" id="mgKey2" onclick="mgPress(2)">⬇</button>
+      <button class="mg-key" id="mgKey3" onclick="mgPress(3)">➡</button>
+    </div>
+    <div class="mg-score-row">
+      <span class="mg-score-label">PUNTEGGIO:</span>
+      <span class="mg-score-val" id="mgScore">0</span>
+    </div>
+    <div class="mg-result" id="mgResult">
+      <div id="mgResultEmoji" style="font-size:36px">🎉</div>
+      <div id="mgResultText" style="color:var(--accent2)"></div>
+      <div id="mgResultBonus" style="color:var(--gold); font-size:16px"></div>
+      <button class="mg-close-btn" onclick="closeMinigame()">✔ CHIUDI</button>
+    </div>
+  </div>
+</div>
+
+<div id="notif"></div>
+
+<!-- ============================================================
+     FIREBASE CONFIG — sostituisci con i tuoi valori!
+     ============================================================ -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, onValue, set, push, serverTimestamp, onDisconnect, increment, runTransaction }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+// ⬇⬇⬇  INCOLLA QUI LA TUA firebaseConfig  ⬇⬇⬇
+const firebaseConfig = {
+  apiKey: "AIzaSyBmFHUG2p4OkuJPTMaoQLUBrklKSs77ek8",
+  authDomain: "tamagochi-furetto.firebaseapp.com",
+  databaseURL: "https://tamagochi-furetto-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "tamagochi-furetto",
+  storageBucket: "tamagochi-furetto.firebasestorage.app",
+  messagingSenderId: "95468268020",
+  appId: "1:95468268020:web:2b59dad67b944d0b33f1a1"
+};
+// ⬆⬆⬆  ——————————————————————————————————  ⬆⬆⬆
+
+const app = initializeApp(firebaseConfig);
+const db  = getDatabase(app);
+
+// ─────────────── PIXEL ART FURETTO ───────────────
+const canvas = document.getElementById('ferret');
+const ctx = canvas.getContext('2d');
+ctx.imageSmoothingEnabled = false;
+
+// Palette: 0=trasparente, 1=bianco puro, 2=grigio chiaro (ombre), 3=rosa (naso/orecchie interne), 4=nero (occhi/dettagli), 5=crema (faccia più chiara)
+const P = ['', '#FFFFFF', '#D8D8D8', '#FFB3C6', '#1a1a2e', '#F0F0F0'];
+
+// Frame 1 - idle (furetto in piedi, visto di lato-frontale)
+const frame1 = [
+  [0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,1,1,2,1,1,2,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,1,1,1,3,1,3,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [1,1,5,4,1,3,1,4,5,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,1,1,1,3,3,3,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,2,2,1,1,1,1,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+];
+
+// Furetto completo: testa + corpo + zampe
+const ferretSprite = [
+//    0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
+  [0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // 0 orecchie
+  [0, 0, 1, 3, 1, 1, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // 1 orecchie interne
+  [0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // 2 testa top
+  [1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // 3 testa
+  [1, 1, 1, 4, 1, 1, 4, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // 4 occhi
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // 5 guance
+  [0, 1, 1, 1, 3, 3, 3, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // 6 naso/bocca
+  [0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // 7 mento
+  [0, 0, 2, 1, 1, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // 8 collo
+  [0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // 9 corpo top
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0], // 10 corpo
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0], // 11 corpo
+  [1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 0], // 12 corpo ombre
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0], // 13 corpo
+  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0], // 14 corpo bot
+  [0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 2, 2, 2], // 15 zampe + coda
+  [0, 2, 2, 0, 0, 2, 2, 0, 0, 2, 2, 0, 0, 2, 2, 0, 0, 1, 1, 1], // 16 piedi + coda
+];
+
+// Frame animato (zampe alzate) per quando si muove
+const ferretSprite2 = [
+  [0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 1, 3, 1, 1, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [1, 1, 1, 4, 1, 1, 4, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 1, 1, 1, 3, 3, 3, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 2, 1, 1, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+  [1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 0],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+  [0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 2, 2, 2], // zampe alternate
+  [0, 0, 2, 0, 2, 2, 0, 2, 0, 0, 2, 0, 2, 2, 0, 2, 0, 1, 1, 1],
+];
+
+let animFrame = 0;
+let isAnimating = false;
+let animInterval = null;
+let isSleeping = false;
+let isDead = false;
+
+function drawFerret(sleeping = false, happy = false, sad = false, dead = false) {
+  ctx.clearRect(0, 0, 60, 50);
+  
+  if (dead) {
+    // Furetto morto con X agli occhi
+    const sprite = ferretSprite;
+    const scale = 3;
+    for (let row = 0; row < sprite.length; row++) {
+      for (let col = 0; col < sprite[row].length; col++) {
+        const v = sprite[row][col];
+        if (v === 0) continue;
+        ctx.fillStyle = v === 4 ? '#888' : P[v];
+        ctx.fillRect(col * scale, row * scale, scale, scale);
+      }
+    }
+    // X agli occhi
+    ctx.fillStyle = '#f87171';
+    const s = scale;
+    [[3,4],[4,4],[4,3],[6,4],[7,4],[7,3]].forEach(([x,y]) => {
+      ctx.fillRect(x*s, y*s, s, s);
+    });
+    return;
+  }
+
+  const sprite = (isAnimating && animFrame % 2 === 1) ? ferretSprite2 : ferretSprite;
+  const scale = 3;
+
+  for (let row = 0; row < sprite.length; row++) {
+    for (let col = 0; col < sprite[row].length; col++) {
+      const v = sprite[row][col];
+      if (v === 0) continue;
+      let color = P[v];
+      if (sleeping && v === 1) color = '#c8d8f8'; // blu pallido quando dorme
+      ctx.fillStyle = color;
+      ctx.fillRect(col * scale, row * scale, scale, scale);
+    }
+  }
+}
+
+drawFerret();
+
+function startAnim() {
+  if (animInterval) return;
+  isAnimating = true;
+  animInterval = setInterval(() => {
+    animFrame++;
+    drawFerret(isSleeping, false, false, isDead);
+  }, 200);
+  setTimeout(() => {
+    clearInterval(animInterval);
+    animInterval = null;
+    isAnimating = false;
+    animFrame = 0;
+    drawFerret(isSleeping, false, false, isDead);
+  }, 1500);
+}
+
+// ─────────────── STATO ───────────────
+let petState = {
+  hunger: 80, energy: 70, fun: 60, clean: 90, mood: 75,
+  sleeping: false, dead: false, lastUpdate: Date.now()
+};
+
+const EMOTIONS = {
+  veryHappy:  { emoji: '😄', label: 'FELICE!' },
+  happy:      { emoji: '😊', label: 'CONTENTO' },
+  neutral:    { emoji: '😐', label: 'NORMALE' },
+  hungry:     { emoji: '😋', label: 'HO FAME' },
+  tired:      { emoji: '😴', label: 'STANCO' },
+  bored:      { emoji: '😒', label: 'ANNOIATO' },
+  dirty:      { emoji: '🤢', label: 'SPORCO' },
+  sad:        { emoji: '😢', label: 'TRISTE' },
+  sick:       { emoji: '🤒', label: 'MALATO' },
+  sleeping:   { emoji: '💤', label: 'DORME' },
+  dead:       { emoji: '💀', label: 'MORTO' },
+};
+
+function calcEmotion(s) {
+  if (s.dead) return 'dead';
+  if (s.sleeping) return 'sleeping';
+  const avg = (s.hunger + s.energy + s.fun + s.clean + s.mood) / 5;
+  if (avg >= 85) return 'veryHappy';
+  if (s.hunger < 20) return 'hungry';
+  if (s.energy < 20) return 'tired';
+  if (s.clean < 20) return 'dirty';
+  if (s.fun < 20) return 'bored';
+  if (s.mood < 30) return 'sad';
+  if (avg >= 65) return 'happy';
+  if (avg >= 40) return 'neutral';
+  return 'sick';
+}
+
+function updateUI(s) {
+  const stats = {
+    hunger: s.hunger, energy: s.energy, fun: s.fun, clean: s.clean, mood: s.mood
+  };
+  for (const [key, val] of Object.entries(stats)) {
+    const clamped = Math.max(0, Math.min(100, Math.round(val)));
+    document.getElementById('bar-' + key).style.width = clamped + '%';
+    document.getElementById('val-' + key).textContent = clamped;
+    // Colore barra in rosso se bassa
+    if (clamped < 20) {
+      document.getElementById('bar-' + key).style.filter = 'hue-rotate(120deg) saturate(2)';
+    } else {
+      document.getElementById('bar-' + key).style.filter = '';
+    }
+  }
+  const emo = calcEmotion(s);
+  document.getElementById('emoBubble').textContent = EMOTIONS[emo].emoji;
+  isSleeping = s.sleeping;
+  isDead = s.dead;
+  document.getElementById('deadOverlay').style.display = s.dead ? 'flex' : 'none';
+  drawFerret(s.sleeping, emo === 'veryHappy', emo === 'sad', s.dead);
+}
+
+// ─────────────── DECAY ───────────────
+function applyDecay(s) {
+  const now = Date.now();
+  const elapsed = (now - (s.lastUpdate || now)) / 1000; // secondi
+  if (elapsed < 1) return s;
+
+  // Se dorme: recupera energia, perde poco altro
+  const modifier = s.sleeping ? 0.2 : 1.0;
+  const newS = {
+    ...s,
+    hunger: s.hunger - elapsed * 0.03 * modifier,
+    energy: s.sleeping ? Math.min(100, s.energy + elapsed * 0.5) : s.energy - elapsed * 0.02,
+    fun: s.fun - elapsed * 0.018 * modifier,
+    clean: s.clean - elapsed * 0.008 * modifier,
+    mood: s.mood - elapsed * 0.012 * modifier,
+    lastUpdate: now
+  };
+
+  // Clamp
+  for (const k of ['hunger','energy','fun','clean','mood']) {
+    newS[k] = Math.max(0, Math.min(100, newS[k]));
+  }
+
+  // Morte se troppo tutto a 0
+  const avg = (newS.hunger + newS.energy + newS.fun + newS.clean + newS.mood) / 5;
+  if (avg < 5 && !newS.dead) newS.dead = true;
+
+  return newS;
+}
+
+// ─────────────── FIREBASE SYNC ───────────────
+const petRef = ref(db, 'pet');
+const chatRef = ref(db, 'chat');
+const visitorsRef = ref(db, 'visitors');
+
+// Sincronizza stato
+onValue(petRef, (snap) => {
+  const raw = snap.val();
+  if (!raw) {
+    // Prima volta: inizializza
+    set(petRef, { ...petState, lastUpdate: Date.now() });
+    return;
+  }
+  const s = applyDecay(raw);
+  petState = s;
+  updateUI(s);
+  // Salva il decay
+  set(petRef, s);
+});
+
+// Aggiorna ogni 30s il decay
+setInterval(() => {
+  if (!petState) return;
+  const s = applyDecay(petState);
+  petState = s;
+  set(petRef, s);
+}, 30000);
+
+// ─────────────── AZIONI ───────────────
+const ACTIONS = {
+  feed:     { hunger: +30, energy: +5,  fun: 0,   clean: -3,  mood: +5,  msg: '🍖 ha mangiato!' },
+  play:     { hunger: -10, energy: -15, fun: +30,  clean: -8,  mood: +20, msg: '🎾 ha giocato!' },
+  sleep:    { sleeping: true, msg: '💤 si addormenta...' },
+  clean:    { hunger: 0,  energy: -5,  fun: -5,  clean: +40, mood: +10, msg: '🛁 è stato lavato!' },
+  medicine: { hunger: 0,  energy: +10, fun: 0,   clean: 0,   mood: +15, msg: '💊 ha preso le medicine!' },
+  pet:      { hunger: 0,  energy: 0,   fun: +10, clean: 0,   mood: +25, msg: '🫶 è stato coccolato!' },
+};
+
+window.doAction = function(action) {
+  if (isDead && action !== 'medicine') {
+    showNotif('💀 Fifi è morto! Dagli le medicine!');
+    return;
+  }
+
+  const act = ACTIONS[action];
+  if (!act) return;
+
+  let newState = { ...petState, lastUpdate: Date.now() };
+
+  if (action === 'sleep') {
+    newState.sleeping = !petState.sleeping;
+    showNotif(newState.sleeping ? '💤 Fifi sta dormendo...' : '☀️ Fifi si è svegliato!');
+  } else {
+    if (petState.sleeping && action !== 'medicine') {
+      showNotif('😴 Fifi sta dormendo! Sveglialo prima.');
+      return;
+    }
+    for (const [key, val] of Object.entries(act)) {
+      if (key === 'msg') continue;
+      if (typeof val === 'number') {
+        newState[key] = Math.max(0, Math.min(100, (newState[key] || 0) + val));
+      }
+    }
+    if (isDead && action === 'medicine') {
+      newState.dead = false;
+      newState.mood = 30; newState.hunger = 30; newState.energy = 30;
+      showNotif('💊 Fifi è tornato in vita!');
+    } else {
+      showNotif('✨ ' + act.msg);
+    }
+  }
+
+  // Clamp
+  for (const k of ['hunger','energy','fun','clean','mood']) {
+    if (newState[k] !== undefined) newState[k] = Math.max(0, Math.min(100, newState[k]));
+  }
+
+  petState = newState;
+  set(petRef, newState);
+  startAnim();
+
+  // Manda messaggio di azione in chat
+  const nick = document.getElementById('nickInput').value.trim() || 'Anonimo';
+  pushChatMsg(nick, act.msg || '✨ ha fatto qualcosa!', 'action');
+};
+
+// ─────────────── CHAT ───────────────
+onValue(chatRef, (snap) => {
+  const data = snap.val();
+  const container = document.getElementById('messages');
+  container.innerHTML = '';
+  if (!data) return;
+
+  const msgs = Object.values(data).sort((a,b) => (a.ts||0)-(b.ts||0)).slice(-60);
+  msgs.forEach(m => {
+    const div = document.createElement('div');
+    div.className = 'msg ' + (m.type || '');
+    const time = m.ts ? new Date(m.ts).toLocaleTimeString('it', {hour:'2-digit',minute:'2-digit'}) : '';
+    div.innerHTML = `
+      <div class="msg-header">
+        <span class="msg-author">${escapeHtml(m.author || 'Anonimo')}</span>
+        <span class="msg-time">${time}</span>
+      </div>
+      <div class="msg-text">${escapeHtml(m.text || '')}</div>
+    `;
+    container.appendChild(div);
+  });
+  container.scrollTop = container.scrollHeight;
+});
+
+function pushChatMsg(author, text, type = 'chat') {
+  push(chatRef, { author, text, type, ts: Date.now() });
+}
+
+window.sendMessage = function() {
+  const nick = document.getElementById('nickInput').value.trim() || 'Anonimo';
+  const msg = document.getElementById('msgInput').value.trim();
+  if (!msg) return;
+  pushChatMsg(nick, msg, 'chat');
+  document.getElementById('msgInput').value = '';
+};
+
+document.getElementById('msgInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    window.sendMessage();
+  }
+});
+
+// ─────────────── VISITATORI ───────────────
+const myVisitorRef = push(visitorsRef);
+set(myVisitorRef, true);
+onDisconnect(myVisitorRef).remove();
+
+onValue(visitorsRef, (snap) => {
+  const count = snap.size || (snap.val() ? Object.keys(snap.val()).length : 0);
+  document.getElementById('visitorsCount').textContent = '👥 ' + count;
+});
+
+// Messaggio benvenuto
+const savedNick = localStorage.getItem('ferretNick');
+if (savedNick) document.getElementById('nickInput').value = savedNick;
+document.getElementById('nickInput').addEventListener('change', () => {
+  localStorage.setItem('ferretNick', document.getElementById('nickInput').value);
+});
+
+// ─────────────── UTILS ───────────────
+function showNotif(msg) {
+  const el = document.getElementById('notif');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ─────────────── AUTO-SLEEP (19:30) ───────────────
+let autoSleptToday = false;
+let autoWokeToday = false;
+
+function checkAutoSleep() {
+  const now = new Date();
+  const h = now.getHours();
+  const m = now.getMinutes();
+  const totalMin = h * 60 + m;
+  const sleepMin = 19 * 60 + 30;  // 19:30
+  const wakeMin  = 7  * 60 + 30;  // 07:30
+
+  // Reset flag a mezzanotte
+  if (h === 0 && m < 2) { autoSleptToday = false; autoWokeToday = false; }
+
+  const label = document.getElementById('sleepClockLabel');
+
+  // Avvicina nanna (preavviso 30 min prima)
+  const minsUntilSleep = sleepMin - totalMin;
+  if (minsUntilSleep > 0 && minsUntilSleep <= 30) {
+    label.textContent = `⚠️ NANNA TRA ${minsUntilSleep} MIN`;
+    label.classList.add('soon');
+  } else if (totalMin >= sleepMin || totalMin < wakeMin) {
+    label.textContent = `💤 FIFI STA DORMENDO`;
+    label.classList.add('soon');
+  } else {
+    label.textContent = `💤 NANNA ALLE 19:30`;
+    label.classList.remove('soon');
+  }
+
+  // Fai dormire automaticamente alle 19:30
+  if (totalMin >= sleepMin && !autoSleptToday) {
+    if (petState && !petState.sleeping && !petState.dead) {
+      autoSleptToday = true;
+      const newState = { ...petState, sleeping: true, lastUpdate: Date.now() };
+      petState = newState;
+      set(petRef, newState);
+      pushChatMsg('🤖 Sistema', '💤 Sono le 19:30 — Fifi va a nanna automaticamente! Buonanotte~ 🌙', 'system');
+      showNotif('🌙 Fifi va a nanna automaticamente!');
+    }
+  }
+
+  // Sveglia automaticamente alle 07:30
+  if (h === 7 && m >= 30 && m < 32 && !autoWokeToday) {
+    if (petState && petState.sleeping && !petState.dead) {
+      autoWokeToday = true;
+      const newState = { ...petState, sleeping: false, lastUpdate: Date.now() };
+      petState = newState;
+      set(petRef, newState);
+      pushChatMsg('🤖 Sistema', '☀️ Sono le 7:30 — Fifi si sveglia riposato! Buongiorno~ 🌅', 'system');
+      showNotif('☀️ Fifi si è svegliato!');
+    }
+  }
+}
+
+// Controlla ogni 30 secondi
+setInterval(checkAutoSleep, 30000);
+checkAutoSleep(); // Controlla subito al caricamento
+
+// ─────────────── MINIGIOCO ───────────────
+const MG_ROUNDS = 5;
+const MG_TIME   = 2000; // ms per rispondere
+const MG_ARROWS = ['⬅','⬆','⬇','➡'];
+
+let mgActive     = false;
+let mgRound      = 0;
+let mgScore      = 0;
+let mgTarget     = 0;
+let mgTimerIntvl = null;
+let mgTimerStart = 0;
+let mgAnswered   = false;
+
+window.startMinigame = function() {
+  if (isDead) { showNotif('💀 Fifi è morto! Dagli le medicine!'); return; }
+  if (petState && petState.sleeping) { showNotif('😴 Fifi sta dormendo!'); return; }
+
+  mgRound  = 0;
+  mgScore  = 0;
+  mgActive = true;
+  document.getElementById('mgResult').classList.remove('show');
+  document.getElementById('mgKeys').style.display = 'flex';
+  document.getElementById('mgRoundInfo').style.display = '';
+  document.getElementById('mgTimerBar').parentElement.style.display = '';
+  document.getElementById('mgScore').textContent = '0';
+  document.getElementById('minigameOverlay').classList.add('active');
+  mgNextRound();
+};
+
+function mgNextRound() {
+  if (mgRound >= MG_ROUNDS) { mgEnd(); return; }
+  mgRound++;
+  mgAnswered = false;
+  mgTarget = Math.floor(Math.random() * 4);
+
+  document.getElementById('mgRoundInfo').textContent = `ROUND ${mgRound} / ${MG_ROUNDS}`;
+  document.getElementById('mgDisplay').textContent = MG_ARROWS[mgTarget];
+  document.getElementById('mgDisplay').classList.remove('flash');
+
+  // Reset tasti
+  for (let i = 0; i < 4; i++) {
+    const btn = document.getElementById('mgKey' + i);
+    btn.classList.remove('target','correct','wrong');
+    btn.disabled = false;
+  }
+  document.getElementById('mgKey' + mgTarget).classList.add('target');
+
+  // Timer bar
+  clearInterval(mgTimerIntvl);
+  mgTimerStart = Date.now();
+  document.getElementById('mgTimerBar').style.width = '100%';
+  mgTimerIntvl = setInterval(() => {
+    const elapsed = Date.now() - mgTimerStart;
+    const pct = Math.max(0, 100 - (elapsed / MG_TIME) * 100);
+    document.getElementById('mgTimerBar').style.width = pct + '%';
+    if (elapsed >= MG_TIME && !mgAnswered) {
+      mgAnswered = true;
+      clearInterval(mgTimerIntvl);
+      // Timeout — lampeggio rosso
+      document.getElementById('mgKey' + mgTarget).classList.remove('target');
+      document.getElementById('mgKey' + mgTarget).classList.add('wrong');
+      setTimeout(() => mgNextRound(), 700);
+    }
+  }, 50);
+}
+
+window.mgPress = function(idx) {
+  if (!mgActive || mgAnswered) return;
+  mgAnswered = true;
+  clearInterval(mgTimerIntvl);
+
+  const btn = document.getElementById('mgKey' + idx);
+  if (idx === mgTarget) {
+    mgScore++;
+    btn.classList.remove('target');
+    btn.classList.add('correct');
+    document.getElementById('mgDisplay').classList.add('flash');
+    document.getElementById('mgScore').textContent = mgScore;
+  } else {
+    btn.classList.add('wrong');
+    document.getElementById('mgKey' + mgTarget).classList.remove('target');
+    document.getElementById('mgKey' + mgTarget).classList.add('wrong');
+  }
+  // Disabilita tutti i tasti
+  for (let i = 0; i < 4; i++) document.getElementById('mgKey' + i).disabled = true;
+
+  setTimeout(() => mgNextRound(), 600);
+};
+
+function mgEnd() {
+  mgActive = false;
+  clearInterval(mgTimerIntvl);
+
+  document.getElementById('mgKeys').style.display = 'none';
+  document.getElementById('mgRoundInfo').style.display = 'none';
+  document.getElementById('mgTimerBar').parentElement.style.display = 'none';
+
+  // Calcola bonus felicità
+  const pct = mgScore / MG_ROUNDS;
+  let funBonus, emoji, resultText;
+  if (pct >= 1.0)        { funBonus = 35; emoji = '🏆'; resultText = 'PERFETTO!'; }
+  else if (pct >= 0.6)   { funBonus = 22; emoji = '🎉'; resultText = 'BRAVO!'; }
+  else if (pct >= 0.4)   { funBonus = 12; emoji = '😊'; resultText = 'NON MALE!'; }
+  else                   { funBonus =  5; emoji = '😅'; resultText = 'RIPROVA!'; }
+
+  document.getElementById('mgResultEmoji').textContent = emoji;
+  document.getElementById('mgResultText').textContent = `${mgScore}/${MG_ROUNDS} GIUSTI — ${resultText}`;
+  document.getElementById('mgResultBonus').textContent = `+${funBonus} DIVERTIMENTO 🎮`;
+  document.getElementById('mgDisplay').textContent = emoji;
+  document.getElementById('mgResult').classList.add('show');
+
+  // Applica bonus allo stato
+  const newState = {
+    ...petState,
+    fun:    Math.min(100, (petState.fun || 0) + funBonus),
+    mood:   Math.min(100, (petState.mood || 0) + Math.round(funBonus * 0.5)),
+    energy: Math.max(0,   (petState.energy || 0) - 10),
+    hunger: Math.max(0,   (petState.hunger || 0) - 8),
+    lastUpdate: Date.now()
+  };
+  petState = newState;
+  set(petRef, newState);
+  startAnim();
+
+  const nick = document.getElementById('nickInput').value.trim() || 'Anonimo';
+  pushChatMsg(nick, `🎮 ha giocato con Fifi! [${mgScore}/${MG_ROUNDS}] +${funBonus} divertimento`, 'action');
+};
+
+window.closeMinigame = function() {
+  document.getElementById('minigameOverlay').classList.remove('active');
+};
+
+// Chiudi con ESC
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') window.closeMinigame();
+  // Supporto tastiera per il minigioco
+  if (mgActive && !mgAnswered) {
+    if (e.key === 'ArrowLeft')  window.mgPress(0);
+    if (e.key === 'ArrowUp')    window.mgPress(1);
+    if (e.key === 'ArrowDown')  window.mgPress(2);
+    if (e.key === 'ArrowRight') window.mgPress(3);
+  }
+});
+
+</script>
+</body>
+</html>
