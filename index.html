@@ -1131,11 +1131,11 @@ function applyDecay(s) {
   const modifier = s.sleeping ? 0.2 : 1.0;
   const newS = {
     ...s,
-    hunger: s.hunger - elapsed * 0.03 * modifier,
-    energy: s.sleeping ? Math.min(100, s.energy + elapsed * 0.5) : s.energy - elapsed * 0.02,
-    fun: s.fun - elapsed * 0.018 * modifier,
-    clean: s.clean - elapsed * 0.008 * modifier,
-    mood: s.mood - elapsed * 0.012 * modifier,
+    hunger: s.hunger - elapsed * 0.008 * modifier,
+    energy: s.sleeping ? Math.min(100, s.energy + elapsed * 0.5) : s.energy - elapsed * 0.005,
+    fun: s.fun - elapsed * 0.005 * modifier,
+    clean: s.clean - elapsed * 0.002 * modifier,
+    mood: s.mood - elapsed * 0.003 * modifier,
     lastUpdate: now
   };
 
