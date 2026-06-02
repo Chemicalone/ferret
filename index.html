@@ -1101,6 +1101,7 @@ const EMOTIONS = {
   dirty:      { emoji: '🤢', label: 'SPORCO' },
   sad:        { emoji: '😢', label: 'TRISTE' },
   sick:       { emoji: '🤒', label: 'MALATO' },
+  sleeping:   { emoji: '💤', label: 'DORME' },
   dead:       { emoji: '💀', label: 'MORTO' },
 };
 
@@ -1154,7 +1155,7 @@ function updateUI(s) {
 }
 
 // ─────────────── DECAY ───────────────
-// Probabilità di ammalarsi: ~0.5% ogni 30s = circa una volta ogni ~100 minuti in media
+// Probabilità di ammalarsi: ~0.33% ogni 30s = circa una volta ogni ~300 tick (~2.5 ore) in media
 const SICK_CHANCE_PER_TICK = 0.00333;
 
 function applyDecay(s) {
