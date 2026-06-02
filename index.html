@@ -491,6 +491,32 @@
     100% { transform: translate(10px,-40px); opacity: 0; }
   }
 
+  /* ---- SICK INDICATOR ---- */
+  .screen.sick-screen {
+    border-color: #f87171 !important;
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.8), 0 0 20px rgba(248,113,113,0.45) !important;
+    animation: sickPulse 2s ease-in-out infinite;
+  }
+  @keyframes sickPulse {
+    0%, 100% { box-shadow: inset 0 0 30px rgba(0,0,0,0.8), 0 0 14px rgba(248,113,113,0.3); }
+    50%       { box-shadow: inset 0 0 30px rgba(0,0,0,0.8), 0 0 28px rgba(248,113,113,0.7); }
+  }
+  .sick-badge {
+    display: none;
+    position: absolute;
+    top: 8px;
+    left: 12px;
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    color: var(--red);
+    background: rgba(248,113,113,0.12);
+    border: 1px solid rgba(248,113,113,0.4);
+    border-radius: 20px;
+    padding: 2px 8px;
+    animation: pulse 1s infinite;
+  }
+  .sick-badge.visible { display: block; }
+
   /* ---- DEAD OVERLAY ---- */
   .dead-overlay {
     position: absolute;
@@ -799,7 +825,8 @@
   <div class="left-col">
     <div class="device">
       <div class="visitors-badge" id="visitorsCount">👥 1</div>
-      <div class="screen">
+      <div class="sick-badge" id="sickBadge">🤒 MALATO</div>
+      <div class="screen" id="petScreen">
         <div class="screen-bg"></div>
         <div class="ferret-container">
           <canvas id="ferret" width="60" height="54"></canvas>
@@ -1074,13 +1101,13 @@ const EMOTIONS = {
   dirty:      { emoji: '🤢', label: 'SPORCO' },
   sad:        { emoji: '😢', label: 'TRISTE' },
   sick:       { emoji: '🤒', label: 'MALATO' },
-  sleeping:   { emoji: '💤', label: 'DORME' },
   dead:       { emoji: '💀', label: 'MORTO' },
 };
 
 function calcEmotion(s) {
   if (s.dead) return 'dead';
   if (s.sleeping) return 'sleeping';
+  if (s.sick) return 'sick';
   const avg = (s.hunger + s.energy + s.fun + s.clean + s.mood) / 5;
   if (avg >= 85) return 'veryHappy';
   if (s.hunger < 20) return 'hungry';
@@ -1090,7 +1117,7 @@ function calcEmotion(s) {
   if (s.mood < 30) return 'sad';
   if (avg >= 65) return 'happy';
   if (avg >= 40) return 'neutral';
-  return 'sick';
+  return 'sad';
 }
 
 function updateUI(s) {
@@ -1113,25 +1140,55 @@ function updateUI(s) {
   isSleeping = s.sleeping;
   isDead = s.dead;
   document.getElementById('deadOverlay').style.display = s.dead ? 'flex' : 'none';
+  // Sick badge e screen glow
+  const sickBadge = document.getElementById('sickBadge');
+  const petScreen = document.getElementById('petScreen');
+  if (s.sick && !s.dead) {
+    sickBadge.classList.add('visible');
+    petScreen.classList.add('sick-screen');
+  } else {
+    sickBadge.classList.remove('visible');
+    petScreen.classList.remove('sick-screen');
+  }
   drawFerret(s.sleeping, emo === 'veryHappy', emo === 'sad', s.dead);
 }
 
 // ─────────────── DECAY ───────────────
+// Probabilità di ammalarsi: ~0.5% ogni 30s = circa una volta ogni ~100 minuti in media
+const SICK_CHANCE_PER_TICK = 0.00333;
+
 function applyDecay(s) {
   const now = Date.now();
   const elapsed = (now - (s.lastUpdate || now)) / 1000; // secondi
   if (elapsed < 1) return s;
 
-  // Se dorme: recupera energia, perde poco altro
-  const modifier = s.sleeping ? 0.2 : 1.0;
+  // Malattia casuale (solo se sveglio, sano e non morto)
+  let newSick = s.sick || false;
+  let justGotSick = false;
+  if (!s.dead && !s.sleeping && !s.sick) {
+    // Probabilità scalata sul tempo trascorso (ogni 30s = SICK_CHANCE_PER_TICK)
+    const ticksElapsed = elapsed / 30;
+    const sickRoll = Math.random();
+    if (sickRoll < SICK_CHANCE_PER_TICK * ticksElapsed) {
+      newSick = true;
+      justGotSick = true;
+    }
+  }
+
+  // Moltiplicatore decay: malato = 2.5x più veloce, dorme = 0.2x
+  const sickMult = newSick ? 2.5 : 1.0;
+  const modifier = s.sleeping ? 0.2 : sickMult;
+
   const newS = {
     ...s,
+    sick: newSick,
     hunger: s.hunger - elapsed * 0.008 * modifier,
-    energy: s.sleeping ? Math.min(100, s.energy + elapsed * 0.5) : s.energy - elapsed * 0.005,
+    energy: s.sleeping ? Math.min(100, s.energy + elapsed * 0.5) : s.energy - elapsed * 0.005 * modifier,
     fun: s.fun - elapsed * 0.005 * modifier,
     clean: s.clean - elapsed * 0.002 * modifier,
     mood: s.mood - elapsed * 0.003 * modifier,
-    lastUpdate: now
+    lastUpdate: now,
+    _justGotSick: justGotSick
   };
 
   // Clamp
@@ -1160,6 +1217,12 @@ onValue(petRef, (snap) => {
     return;
   }
   const s = applyDecay(raw);
+  // Notifica se Pan si è appena ammalato
+  if (s._justGotSick) {
+    pushChatMsg('🤖 Sistema', '🤒 Pan si è ammalato! Dategli la pillola 💊 al più presto!', 'system');
+    showNotif('🤒 Pan si è ammalato!');
+  }
+  delete s._justGotSick;
   petState = s;
   updateUI(s);
   // Salva il decay
@@ -1170,6 +1233,11 @@ onValue(petRef, (snap) => {
 setInterval(() => {
   if (!petState) return;
   const s = applyDecay(petState);
+  if (s._justGotSick) {
+    pushChatMsg('🤖 Sistema', '🤒 Pan si è ammalato! Dategli la pillola 💊 al più presto!', 'system');
+    showNotif('🤒 Pan si è ammalato!');
+  }
+  delete s._justGotSick;
   petState = s;
   set(petRef, s);
 }, 30000);
@@ -1211,8 +1279,22 @@ window.doAction = function(action) {
     }
     if (isDead && action === 'medicine') {
       newState.dead = false;
+      newState.sick = false;
       newState.mood = 30; newState.hunger = 30; newState.energy = 30;
       showNotif('💊 Pan è tornato in vita!');
+    } else if (action === 'medicine' && petState.sick) {
+      newState.sick = false;
+      showNotif('💊 Pan è guarito! Che sollievo~ 🌟');
+      pushChatMsg('🤖 Sistema', '🌟 Pan è guarito! Grazie a chi gli ha dato la pillola 💊', 'system');
+      startAnim();
+      petState = newState;
+      set(petRef, newState);
+      const nick2 = document.getElementById('nickInput').value.trim() || 'Anonimo';
+      pushChatMsg(nick2, '💊 ha curato Pan!', 'action');
+      return;
+    } else if (action === 'medicine' && !petState.sick && !isDead) {
+      showNotif('🤔 Pan è già in salute!');
+      return;
     } else {
       showNotif('✨ ' + act.msg);
     }
