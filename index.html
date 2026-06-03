@@ -1055,8 +1055,8 @@
   }
 
   .mg3-tile.lit { opacity: 1; transform: scale(1.05); box-shadow: 0 0 22px currentColor; }
-  .mg3-tile.active-input { opacity: 1; }
-  .mg3-tile.active-input:hover { transform: scale(1.06); opacity: 1; }
+  .mg3-tile.active-input { opacity: 0.45; }
+  .mg3-tile.active-input:hover { transform: scale(1.06); opacity: 0.7; }
   .mg3-tile:disabled { cursor: default; }
 
   .mg3-status {
@@ -1880,7 +1880,7 @@ window.mg2Guess = function() {
     document.getElementById('mg2Display').textContent = mg2Secret;
     const funBonus = mg2Lives >= 5 ? 40 : mg2Lives >= 3 ? 28 : 15;
     const emoji    = mg2Lives >= 5 ? '🏆' : mg2Lives >= 3 ? '🎉' : '😅';
-    const msg      = mg2Lives >= 5 ? 'AL PRIMO COLPO!!' : `IN ${mg2Tries} TENTATIVI!`;
+    const msg      = mg2Tries === 1 ? 'AL PRIMO COLPO!!' : `IN ${mg2Tries} TENTATIVI!`;
     document.getElementById('mg2ResultEmoji').textContent = emoji;
     document.getElementById('mg2ResultText').textContent = `${msg} ERA ${mg2Secret}!`;
     document.getElementById('mg2ResultBonus').textContent = `+${funBonus} DIVERTIMENTO 🎮`;
@@ -2009,54 +2009,53 @@ window.mg3Press = function(idx) {
   const tile = document.getElementById('mg3t' + idx);
   tile.classList.add('lit');
   tile.style.opacity = '1';
+
+  const wrong = mg3PlayerSeq[pos] !== mg3Seq[pos];
+  const levelDone = !wrong && mg3PlayerSeq.length === mg3Seq.length;
+
+  // Disabilita subito i click ulteriori se sbagliato o livello finito
+  if (wrong || levelDone) mg3Active = false;
+
   setTimeout(() => {
     tile.classList.remove('lit');
-    tile.style.opacity = '0.9';
-  }, 180);
+    tile.style.opacity = '0.45';
 
-  if (mg3PlayerSeq[pos] !== mg3Seq[pos]) {
-    // Errore — game over
-    mg3Active = false;
-    mg3SetTilesEnabled(false);
-    document.getElementById('mg3Status').textContent = '❌ SBAGLIATO!';
-    // Flash rosso su tutti
-    for (let i = 0; i < 4; i++) {
-      const t = document.getElementById('mg3t' + i);
-      t.style.opacity = '0.9';
-    }
-    const reachedLevel = mg3Level;
-    const funBonus = Math.min(60, 5 + (reachedLevel - 1) * 8);
-    const emoji    = reachedLevel >= 8 ? '🏆' : reachedLevel >= 5 ? '🎉' : reachedLevel >= 3 ? '😊' : '😅';
-    const msg      = `ARRIVATO AL LV.${reachedLevel}!`;
-    setTimeout(() => {
-      document.getElementById('mg3ResultEmoji').textContent = emoji;
-      document.getElementById('mg3ResultText').textContent = msg;
-      document.getElementById('mg3ResultBonus').textContent = `+${funBonus} DIVERTIMENTO 🎮`;
-      document.getElementById('mg3Result').classList.add('show');
-      _mg3ApplyBonus(funBonus, reachedLevel);
-    }, 700);
-    return;
-  }
-
-  // Sequenza completata per questo livello?
-  if (mg3PlayerSeq.length === mg3Seq.length) {
-    mg3SetTilesEnabled(false);
-    document.getElementById('mg3Status').textContent = `✅ LIVELLO ${mg3Level} OK!`;
-    if (mg3Level >= 10) {
-      // Vittoria massima
-      mg3Active = false;
-      const funBonus = 65;
+    if (wrong) {
+      // Game over
+      mg3SetTilesEnabled(false);
+      // spegni tutti i tile
+      for (let i = 0; i < 4; i++) {
+        document.getElementById('mg3t' + i).style.opacity = '0.4';
+      }
+      document.getElementById('mg3Status').textContent = '❌ SBAGLIATO!';
+      const reachedLevel = mg3Level;
+      const funBonus = Math.min(60, 5 + (reachedLevel - 1) * 8);
+      const emoji    = reachedLevel >= 8 ? '🏆' : reachedLevel >= 5 ? '🎉' : reachedLevel >= 3 ? '😊' : '😅';
       setTimeout(() => {
-        document.getElementById('mg3ResultEmoji').textContent = '🏆';
-        document.getElementById('mg3ResultText').textContent = 'MAESTRO DEL MEMORY!';
+        document.getElementById('mg3ResultEmoji').textContent = emoji;
+        document.getElementById('mg3ResultText').textContent = `ARRIVATO AL LV.${reachedLevel}!`;
         document.getElementById('mg3ResultBonus').textContent = `+${funBonus} DIVERTIMENTO 🎮`;
         document.getElementById('mg3Result').classList.add('show');
-        _mg3ApplyBonus(funBonus, 10);
-      }, 600);
-    } else {
-      setTimeout(() => mg3NextLevel(), 900);
+        _mg3ApplyBonus(funBonus, reachedLevel);
+      }, 500);
+    } else if (levelDone) {
+      mg3SetTilesEnabled(false);
+      document.getElementById('mg3Status').textContent = `✅ LIVELLO ${mg3Level} OK!`;
+      if (mg3Level >= 10) {
+        const funBonus = 65;
+        setTimeout(() => {
+          document.getElementById('mg3ResultEmoji').textContent = '🏆';
+          document.getElementById('mg3ResultText').textContent = 'MAESTRO DEL MEMORY!';
+          document.getElementById('mg3ResultBonus').textContent = `+${funBonus} DIVERTIMENTO 🎮`;
+          document.getElementById('mg3Result').classList.add('show');
+          _mg3ApplyBonus(funBonus, 10);
+        }, 600);
+      } else {
+        mg3Active = true; // riattiva per il prossimo livello
+        setTimeout(() => mg3NextLevel(), 900);
+      }
     }
-  }
+  }, 180);
 };
 
 function mg3SetTilesEnabled(enabled) {
