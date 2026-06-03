@@ -1521,8 +1521,9 @@ function updateUI(s) {
 }
 
 // ─────────────── DECAY ───────────────
-// Probabilità di ammalarsi: ~0.33% ogni 30s = circa una volta ogni ~300 tick (~2.5 ore) in media
-const SICK_CHANCE_PER_TICK = 0.00333;
+// Probabilità di ammalarsi: ~50% nell'arco di 24 ore (2880 tick da 30s)
+// P(mai malato in 2880 tick) = 0.50 → per tick = 1 - 0.5^(1/2880) ≈ 0.000240
+const SICK_CHANCE_PER_TICK = 0.000240;
 
 function applyDecay(s) {
   const now = Date.now();
@@ -1542,8 +1543,8 @@ function applyDecay(s) {
     }
   }
 
-  // Moltiplicatore decay: malato = 2.5x più veloce, dorme = 0.2x
-  const sickMult = newSick ? 2.5 : 1.0;
+  // Moltiplicatore decay: malato = 2x più veloce, dorme = 0.2x
+  const sickMult = newSick ? 2.0 : 1.0;
   const modifier = s.sleeping ? 0.2 : sickMult;
 
   const newS = {
