@@ -1976,13 +1976,10 @@ function mg3ShowSequence() {
   mg3Showing = true;
   mg3SetTilesEnabled(false);
   let i = 0;
-  const delay = Math.max(350, 700 - mg3Level * 30);
+  const litTime = Math.max(250, 500 - mg3Level * 25);
+  const gapTime = 130;
 
-  function next() {
-    if (i > 0) {
-      document.getElementById('mg3t' + mg3Seq[i-1]).classList.remove('lit');
-      document.getElementById('mg3t' + mg3Seq[i-1]).style.opacity = '0.4';
-    }
+  function showNext() {
     if (i >= mg3Seq.length) {
       mg3Showing = false;
       document.getElementById('mg3Status').textContent = 'Ora tocca a te!';
@@ -1993,9 +1990,14 @@ function mg3ShowSequence() {
     tile.classList.add('lit');
     tile.style.opacity = '1';
     i++;
-    setTimeout(next, delay);
+    setTimeout(() => {
+      tile.classList.remove('lit');
+      tile.style.opacity = '0.4';
+      setTimeout(showNext, gapTime);
+    }, litTime);
   }
-  setTimeout(next, 300);
+
+  setTimeout(showNext, 300);
 }
 
 window.mg3Press = function(idx) {
