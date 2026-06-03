@@ -2005,10 +2005,14 @@ window.mg3Press = function(idx) {
   mg3PlayerSeq.push(idx);
   const pos = mg3PlayerSeq.length - 1;
 
-  // Flash
+  // Flash accendi → spegni
   const tile = document.getElementById('mg3t' + idx);
+  tile.classList.add('lit');
   tile.style.opacity = '1';
-  setTimeout(() => { tile.style.opacity = '0.9'; }, 150);
+  setTimeout(() => {
+    tile.classList.remove('lit');
+    tile.style.opacity = '0.9';
+  }, 180);
 
   if (mg3PlayerSeq[pos] !== mg3Seq[pos]) {
     // Errore — game over
