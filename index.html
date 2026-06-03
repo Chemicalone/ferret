@@ -813,6 +813,300 @@
     font-size: 18px;
     color: var(--muted);
   }
+
+  /* ---- GAME SELECT OVERLAY ---- */
+  #gameSelectOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+  #gameSelectOverlay.active { display: flex; }
+
+  .game-select-box {
+    background: var(--panel);
+    border: 3px solid var(--accent);
+    border-radius: 18px;
+    padding: 28px 24px;
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 0 60px rgba(124,92,191,0.5);
+  }
+
+  .gs-title {
+    font-size: 10px;
+    color: var(--accent2);
+    letter-spacing: 2px;
+    text-align: center;
+  }
+
+  .gs-subtitle {
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .gs-btn {
+    width: 100%;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    padding: 14px 10px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: var(--panel2);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.1s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .gs-btn .gs-icon { font-size: 22px; flex-shrink: 0; }
+  .gs-btn .gs-info { display: flex; flex-direction: column; gap: 4px; text-align: left; }
+  .gs-btn .gs-desc { font-family: 'VT323', monospace; font-size: 14px; color: var(--muted); }
+
+  .gs-btn:hover { background: var(--accent); border-color: var(--accent2); color: white; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(124,92,191,0.4); }
+  .gs-btn:hover .gs-desc { color: rgba(255,255,255,0.7); }
+  .gs-btn:active { transform: translateY(0); }
+
+  .gs-close-btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    padding: 10px 20px;
+    background: transparent;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.1s;
+    width: 100%;
+  }
+  .gs-close-btn:hover { border-color: var(--accent2); color: var(--text); }
+
+  /* ---- MINIGIOCO 2: INDOVINA IL NUMERO ---- */
+  #mg2Overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+  #mg2Overlay.active { display: flex; }
+
+  .mg2-box {
+    background: var(--panel);
+    border: 3px solid var(--blue);
+    border-radius: 18px;
+    padding: 28px 24px;
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 0 60px rgba(96,165,250,0.4);
+    position: relative;
+  }
+
+  .mg2-title { font-size: 10px; color: var(--blue); letter-spacing: 2px; }
+  .mg2-subtitle { font-family: 'VT323', monospace; font-size: 16px; color: var(--muted); text-align: center; }
+
+  .mg2-display {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 36px;
+    color: var(--gold);
+    text-shadow: 0 0 20px rgba(251,191,36,0.6);
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mg2-hint {
+    font-family: 'VT323', monospace;
+    font-size: 22px;
+    color: var(--accent2);
+    min-height: 28px;
+    text-align: center;
+  }
+
+  .mg2-input-row {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .mg2-input {
+    flex: 1;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 18px;
+    background: var(--panel2);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    padding: 10px;
+    outline: none;
+    text-align: center;
+  }
+  .mg2-input:focus { border-color: var(--blue); }
+
+  .mg2-guess-btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    padding: 0 14px;
+    background: var(--blue);
+    border: 2px solid #93c5fd;
+    border-radius: 8px;
+    color: #0a0a1a;
+    cursor: pointer;
+    transition: all 0.1s;
+    white-space: nowrap;
+    touch-action: manipulation;
+  }
+  .mg2-guess-btn:hover { background: #93c5fd; box-shadow: 0 0 12px rgba(96,165,250,0.5); }
+
+  .mg2-lives {
+    font-family: 'VT323', monospace;
+    font-size: 22px;
+    letter-spacing: 4px;
+  }
+
+  .mg2-result {
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    text-align: center;
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+  }
+  .mg2-result.show { display: flex; }
+
+  .mg2-close-btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    padding: 10px 20px;
+    background: var(--blue);
+    border: 2px solid #93c5fd;
+    border-radius: 8px;
+    color: #0a0a1a;
+    cursor: pointer;
+    transition: all 0.1s;
+    touch-action: manipulation;
+  }
+  .mg2-close-btn:hover { background: #93c5fd; }
+
+  /* ---- MINIGIOCO 3: MEMORY COLORI ---- */
+  #mg3Overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+  #mg3Overlay.active { display: flex; }
+
+  .mg3-box {
+    background: var(--panel);
+    border: 3px solid var(--pink);
+    border-radius: 18px;
+    padding: 28px 24px;
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 0 60px rgba(244,114,182,0.4);
+  }
+
+  .mg3-title { font-size: 10px; color: var(--pink); letter-spacing: 2px; }
+  .mg3-subtitle { font-family: 'VT323', monospace; font-size: 16px; color: var(--muted); text-align: center; }
+
+  .mg3-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    width: 100%;
+  }
+
+  .mg3-tile {
+    height: 70px;
+    border-radius: 12px;
+    border: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.12s;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    opacity: 0.4;
+  }
+
+  .mg3-tile.lit { opacity: 1; transform: scale(1.05); box-shadow: 0 0 22px currentColor; }
+  .mg3-tile.active-input { opacity: 1; }
+  .mg3-tile.active-input:hover { transform: scale(1.06); opacity: 1; }
+  .mg3-tile:disabled { cursor: default; }
+
+  .mg3-status {
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    color: var(--muted);
+    text-align: center;
+    min-height: 28px;
+  }
+
+  .mg3-level {
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    color: var(--accent2);
+  }
+
+  .mg3-result {
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    text-align: center;
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+  }
+  .mg3-result.show { display: flex; }
+
+  .mg3-close-btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    padding: 10px 20px;
+    background: var(--pink);
+    border: 2px solid #fbcfe8;
+    border-radius: 8px;
+    color: #0a0a1a;
+    cursor: pointer;
+    transition: all 0.1s;
+    touch-action: manipulation;
+  }
+  .mg3-close-btn:hover { background: #fbcfe8; }
+
+  @media (max-width: 700px) {
+    .game-select-box, .mg2-box, .mg3-box {
+      width: calc(100vw - 32px);
+      max-width: 340px;
+      padding: 20px 16px;
+    }
+    .mg3-tile { height: 60px; }
+    .mg2-input { font-size: 16px; }
+  }
 </style>
 </head>
 <body>
@@ -841,7 +1135,7 @@
       </div>
       <div class="buttons-row">
         <button class="btn feed" onclick="doAction('feed')"><span class="icon">🍖</span>MANGIA</button>
-        <button class="btn play" onclick="startMinigame()"><span class="icon">🎾</span>GIOCA</button>
+        <button class="btn play" onclick="openGameSelect()"><span class="icon">🎾</span>GIOCA</button>
         <button class="btn sleep" onclick="doAction('sleep')"><span class="icon">💤</span>DORMI</button>
         <button class="btn clean" onclick="doAction('clean')"><span class="icon">🛁</span>PULISCI</button>
         <button class="btn medicine" onclick="doAction('medicine')"><span class="icon">💊</span>CURA</button>
@@ -904,6 +1198,78 @@
           <button class="send-btn" onclick="sendMessage()">INVIA</button>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- GAME SELECT OVERLAY -->
+<div id="gameSelectOverlay">
+  <div class="game-select-box">
+    <div class="gs-title">🎮 SCEGLI UN GIOCO</div>
+    <div class="gs-subtitle">Cosa vuoi giocare con Pan?</div>
+    <button class="gs-btn" onclick="selectGame(1)">
+      <span class="gs-icon">⬅</span>
+      <div class="gs-info">
+        <span>RIFLESSI</span>
+        <span class="gs-desc">Premi il tasto giusto in tempo!</span>
+      </div>
+    </button>
+    <button class="gs-btn" onclick="selectGame(2)">
+      <span class="gs-icon">🔢</span>
+      <div class="gs-info">
+        <span>INDOVINA</span>
+        <span class="gs-desc">Trova il numero segreto (1-50)!</span>
+      </div>
+    </button>
+    <button class="gs-btn" onclick="selectGame(3)">
+      <span class="gs-icon">🎨</span>
+      <div class="gs-info">
+        <span>MEMORY</span>
+        <span class="gs-desc">Ripeti la sequenza di colori!</span>
+      </div>
+    </button>
+    <button class="gs-close-btn" onclick="closeGameSelect()">✖ ANNULLA</button>
+  </div>
+</div>
+
+<!-- MINIGIOCO 2: INDOVINA IL NUMERO -->
+<div id="mg2Overlay">
+  <div class="mg2-box">
+    <div class="mg2-title">🔢 INDOVINA</div>
+    <div class="mg2-subtitle">Trova il numero segreto tra 1 e 50!</div>
+    <div class="mg2-display" id="mg2Display">?</div>
+    <div class="mg2-hint" id="mg2Hint">Inserisci un numero...</div>
+    <div class="mg2-lives" id="mg2Lives">❤️❤️❤️❤️❤️</div>
+    <div class="mg2-input-row">
+      <input class="mg2-input" id="mg2Input" type="number" min="1" max="50" placeholder="1-50" />
+      <button class="mg2-guess-btn" onclick="mg2Guess()">OK!</button>
+    </div>
+    <div class="mg2-result" id="mg2Result">
+      <div id="mg2ResultEmoji" style="font-size:36px">🎉</div>
+      <div id="mg2ResultText" style="color:var(--accent2)"></div>
+      <div id="mg2ResultBonus" style="color:var(--gold); font-size:16px"></div>
+      <button class="mg2-close-btn" onclick="closeMg2()">✔ CHIUDI</button>
+    </div>
+  </div>
+</div>
+
+<!-- MINIGIOCO 3: MEMORY COLORI -->
+<div id="mg3Overlay">
+  <div class="mg3-box">
+    <div class="mg3-title">🎨 MEMORY</div>
+    <div class="mg3-level" id="mg3Level">LIVELLO 1</div>
+    <div class="mg3-status" id="mg3Status">Guarda la sequenza!</div>
+    <div class="mg3-grid">
+      <button class="mg3-tile" id="mg3t0" style="background:#f87171; color:#f87171;" onclick="mg3Press(0)" disabled></button>
+      <button class="mg3-tile" id="mg3t1" style="background:#60a5fa; color:#60a5fa;" onclick="mg3Press(1)" disabled></button>
+      <button class="mg3-tile" id="mg3t2" style="background:#4ade80; color:#4ade80;" onclick="mg3Press(2)" disabled></button>
+      <button class="mg3-tile" id="mg3t3" style="background:#fbbf24; color:#fbbf24;" onclick="mg3Press(3)" disabled></button>
+    </div>
+    <div class="mg3-result" id="mg3Result">
+      <div id="mg3ResultEmoji" style="font-size:36px">🎉</div>
+      <div id="mg3ResultText" style="color:var(--accent2)"></div>
+      <div id="mg3ResultBonus" style="color:var(--gold); font-size:16px"></div>
+      <button class="mg3-close-btn" onclick="closeMg3()">✔ CHIUDI</button>
     </div>
   </div>
 </div>
@@ -1457,6 +1823,265 @@ function checkAutoSleep() {
 setInterval(checkAutoSleep, 30000);
 checkAutoSleep(); // Controlla subito al caricamento
 
+// ─────────────── MENU SELEZIONE GIOCHI ───────────────
+window.openGameSelect = function() {
+  if (isDead) { showNotif('💀 Pan è morto! Dagli le medicine!'); return; }
+  if (petState && petState.sleeping) { showNotif('😴 Pan sta dormendo!'); return; }
+  document.getElementById('gameSelectOverlay').classList.add('active');
+};
+
+window.closeGameSelect = function() {
+  document.getElementById('gameSelectOverlay').classList.remove('active');
+};
+
+window.selectGame = function(n) {
+  closeGameSelect();
+  if (n === 1) startMinigame();
+  if (n === 2) startMg2();
+  if (n === 3) startMg3();
+};
+
+// ─────────────── MINIGIOCO 2: INDOVINA IL NUMERO ───────────────
+let mg2Secret = 0;
+let mg2Lives  = 5;
+let mg2Tries  = 0;
+let mg2Active = false;
+
+window.startMg2 = function() {
+  mg2Secret = Math.floor(Math.random() * 50) + 1;
+  mg2Lives  = 5;
+  mg2Tries  = 0;
+  mg2Active = true;
+
+  document.getElementById('mg2Display').textContent = '?';
+  document.getElementById('mg2Hint').textContent = 'Inserisci un numero...';
+  document.getElementById('mg2Lives').textContent = '❤️'.repeat(mg2Lives);
+  document.getElementById('mg2Input').value = '';
+  document.getElementById('mg2Input').disabled = false;
+  document.querySelector('.mg2-guess-btn').disabled = false;
+  document.getElementById('mg2Result').classList.remove('show');
+  document.getElementById('mg2Overlay').classList.add('active');
+  setTimeout(() => document.getElementById('mg2Input').focus(), 100);
+};
+
+window.mg2Guess = function() {
+  if (!mg2Active) return;
+  const val = parseInt(document.getElementById('mg2Input').value);
+  if (isNaN(val) || val < 1 || val > 50) {
+    document.getElementById('mg2Hint').textContent = '⚠️ Numero tra 1 e 50!';
+    return;
+  }
+  mg2Tries++;
+  document.getElementById('mg2Input').value = '';
+
+  if (val === mg2Secret) {
+    // Vinto!
+    mg2Active = false;
+    document.getElementById('mg2Display').textContent = mg2Secret;
+    const funBonus = mg2Lives >= 5 ? 40 : mg2Lives >= 3 ? 28 : 15;
+    const emoji    = mg2Lives >= 5 ? '🏆' : mg2Lives >= 3 ? '🎉' : '😅';
+    const msg      = mg2Lives >= 5 ? 'AL PRIMO COLPO!!' : `IN ${mg2Tries} TENTATIVI!`;
+    document.getElementById('mg2ResultEmoji').textContent = emoji;
+    document.getElementById('mg2ResultText').textContent = `${msg} ERA ${mg2Secret}!`;
+    document.getElementById('mg2ResultBonus').textContent = `+${funBonus} DIVERTIMENTO 🎮`;
+    document.getElementById('mg2Input').disabled = true;
+    document.querySelector('.mg2-guess-btn').disabled = true;
+    document.getElementById('mg2Result').classList.add('show');
+    _mg2ApplyBonus(funBonus, mg2Tries, mg2Secret);
+  } else {
+    mg2Lives--;
+    const higher = val < mg2Secret;
+    const diff   = Math.abs(val - mg2Secret);
+    const temp   = diff <= 3 ? '🔥 BOLLENTE!' : diff <= 8 ? '♨️ CALDO' : diff <= 15 ? '🌡️ TIEPIDO' : '🧊 FREDDO';
+    document.getElementById('mg2Display').textContent = val;
+    document.getElementById('mg2Hint').textContent = `${higher ? '📈 PIÙ ALTO' : '📉 PIÙ BASSO'} — ${temp}`;
+    document.getElementById('mg2Lives').textContent = '❤️'.repeat(mg2Lives) + '🖤'.repeat(5 - mg2Lives);
+
+    if (mg2Lives <= 0) {
+      // Perso
+      mg2Active = false;
+      document.getElementById('mg2Display').textContent = mg2Secret;
+      document.getElementById('mg2Hint').textContent = `ERA ${mg2Secret}!`;
+      document.getElementById('mg2ResultEmoji').textContent = '😭';
+      document.getElementById('mg2ResultText').textContent = `IL NUMERO ERA ${mg2Secret}!`;
+      document.getElementById('mg2ResultBonus').textContent = `+5 DIVERTIMENTO 🎮`;
+      document.getElementById('mg2Input').disabled = true;
+      document.querySelector('.mg2-guess-btn').disabled = true;
+      document.getElementById('mg2Result').classList.add('show');
+      _mg2ApplyBonus(5, mg2Tries, mg2Secret);
+    }
+  }
+};
+
+function _mg2ApplyBonus(funBonus, tries, secret) {
+  const newState = {
+    ...petState,
+    fun:    Math.min(100, (petState.fun || 0) + funBonus),
+    mood:   Math.min(100, (petState.mood || 0) + Math.round(funBonus * 0.4)),
+    energy: Math.max(0,   (petState.energy || 0) - 8),
+    hunger: Math.max(0,   (petState.hunger || 0) - 6),
+    lastUpdate: Date.now()
+  };
+  petState = newState;
+  set(petRef, newState);
+  startAnim();
+  const nick = document.getElementById('nickInput').value.trim() || 'Anonimo';
+  pushChatMsg(nick, `🔢 ha giocato a Indovina (${tries} tentativi, era ${secret})! +${funBonus} divertimento`, 'action');
+}
+
+window.closeMg2 = function() {
+  document.getElementById('mg2Overlay').classList.remove('active');
+};
+
+document.getElementById('mg2Input').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') window.mg2Guess();
+});
+
+// ─────────────── MINIGIOCO 3: MEMORY COLORI ───────────────
+let mg3Seq       = [];
+let mg3PlayerSeq = [];
+let mg3Level     = 0;
+let mg3Showing   = false;
+let mg3Active    = false;
+
+const MG3_COLORS = ['#f87171','#60a5fa','#4ade80','#fbbf24'];
+
+window.startMg3 = function() {
+  mg3Seq       = [];
+  mg3PlayerSeq = [];
+  mg3Level     = 0;
+  mg3Active    = true;
+
+  document.getElementById('mg3Result').classList.remove('show');
+  document.getElementById('mg3Overlay').classList.add('active');
+  mg3SetTilesEnabled(false);
+  for (let i = 0; i < 4; i++) {
+    const t = document.getElementById('mg3t' + i);
+    t.classList.remove('lit', 'active-input');
+    t.style.opacity = '0.4';
+  }
+  setTimeout(() => mg3NextLevel(), 400);
+};
+
+function mg3NextLevel() {
+  mg3Level++;
+  mg3PlayerSeq = [];
+  document.getElementById('mg3Level').textContent = `LIVELLO ${mg3Level}`;
+  document.getElementById('mg3Status').textContent = 'Guarda la sequenza!';
+  mg3Seq.push(Math.floor(Math.random() * 4));
+  mg3ShowSequence();
+}
+
+function mg3ShowSequence() {
+  mg3Showing = true;
+  mg3SetTilesEnabled(false);
+  let i = 0;
+  const delay = Math.max(350, 700 - mg3Level * 30);
+
+  function next() {
+    if (i > 0) {
+      document.getElementById('mg3t' + mg3Seq[i-1]).classList.remove('lit');
+      document.getElementById('mg3t' + mg3Seq[i-1]).style.opacity = '0.4';
+    }
+    if (i >= mg3Seq.length) {
+      mg3Showing = false;
+      document.getElementById('mg3Status').textContent = 'Ora tocca a te!';
+      mg3SetTilesEnabled(true);
+      return;
+    }
+    const tile = document.getElementById('mg3t' + mg3Seq[i]);
+    tile.classList.add('lit');
+    tile.style.opacity = '1';
+    i++;
+    setTimeout(next, delay);
+  }
+  setTimeout(next, 300);
+}
+
+window.mg3Press = function(idx) {
+  if (mg3Showing || !mg3Active) return;
+  mg3PlayerSeq.push(idx);
+  const pos = mg3PlayerSeq.length - 1;
+
+  // Flash
+  const tile = document.getElementById('mg3t' + idx);
+  tile.style.opacity = '1';
+  setTimeout(() => { tile.style.opacity = '0.9'; }, 150);
+
+  if (mg3PlayerSeq[pos] !== mg3Seq[pos]) {
+    // Errore — game over
+    mg3Active = false;
+    mg3SetTilesEnabled(false);
+    document.getElementById('mg3Status').textContent = '❌ SBAGLIATO!';
+    // Flash rosso su tutti
+    for (let i = 0; i < 4; i++) {
+      const t = document.getElementById('mg3t' + i);
+      t.style.opacity = '0.9';
+    }
+    const reachedLevel = mg3Level;
+    const funBonus = Math.min(60, 5 + (reachedLevel - 1) * 8);
+    const emoji    = reachedLevel >= 8 ? '🏆' : reachedLevel >= 5 ? '🎉' : reachedLevel >= 3 ? '😊' : '😅';
+    const msg      = `ARRIVATO AL LV.${reachedLevel}!`;
+    setTimeout(() => {
+      document.getElementById('mg3ResultEmoji').textContent = emoji;
+      document.getElementById('mg3ResultText').textContent = msg;
+      document.getElementById('mg3ResultBonus').textContent = `+${funBonus} DIVERTIMENTO 🎮`;
+      document.getElementById('mg3Result').classList.add('show');
+      _mg3ApplyBonus(funBonus, reachedLevel);
+    }, 700);
+    return;
+  }
+
+  // Sequenza completata per questo livello?
+  if (mg3PlayerSeq.length === mg3Seq.length) {
+    mg3SetTilesEnabled(false);
+    document.getElementById('mg3Status').textContent = `✅ LIVELLO ${mg3Level} OK!`;
+    if (mg3Level >= 10) {
+      // Vittoria massima
+      mg3Active = false;
+      const funBonus = 65;
+      setTimeout(() => {
+        document.getElementById('mg3ResultEmoji').textContent = '🏆';
+        document.getElementById('mg3ResultText').textContent = 'MAESTRO DEL MEMORY!';
+        document.getElementById('mg3ResultBonus').textContent = `+${funBonus} DIVERTIMENTO 🎮`;
+        document.getElementById('mg3Result').classList.add('show');
+        _mg3ApplyBonus(funBonus, 10);
+      }, 600);
+    } else {
+      setTimeout(() => mg3NextLevel(), 900);
+    }
+  }
+};
+
+function mg3SetTilesEnabled(enabled) {
+  for (let i = 0; i < 4; i++) {
+    const t = document.getElementById('mg3t' + i);
+    t.disabled = !enabled;
+    if (enabled) t.classList.add('active-input');
+    else t.classList.remove('active-input');
+  }
+}
+
+function _mg3ApplyBonus(funBonus, level) {
+  const newState = {
+    ...petState,
+    fun:    Math.min(100, (petState.fun || 0) + funBonus),
+    mood:   Math.min(100, (petState.mood || 0) + Math.round(funBonus * 0.4)),
+    energy: Math.max(0,   (petState.energy || 0) - 12),
+    hunger: Math.max(0,   (petState.hunger || 0) - 8),
+    lastUpdate: Date.now()
+  };
+  petState = newState;
+  set(petRef, newState);
+  startAnim();
+  const nick = document.getElementById('nickInput').value.trim() || 'Anonimo';
+  pushChatMsg(nick, `🎨 ha giocato a Memory (lv.${level})! +${funBonus} divertimento`, 'action');
+}
+
+window.closeMg3 = function() {
+  document.getElementById('mg3Overlay').classList.remove('active');
+};
+
 // ─────────────── MINIGIOCO ───────────────
 const MG_ROUNDS = 5;
 const MG_TIME   = 2000; // ms per rispondere
@@ -1591,7 +2216,12 @@ window.closeMinigame = function() {
 
 // Chiudi con ESC
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') window.closeMinigame();
+  if (e.key === 'Escape') {
+    window.closeMinigame();
+    window.closeGameSelect();
+    window.closeMg2();
+    window.closeMg3();
+  }
   // Supporto tastiera per il minigioco
   if (mgActive && !mgAnswered) {
     if (e.key === 'ArrowLeft')  window.mgPress(0);
