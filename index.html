@@ -1107,6 +1107,343 @@
     .mg3-tile { height: 60px; }
     .mg2-input { font-size: 16px; }
   }
+
+  /* ---- MINIGIOCO PULIZIA ---- */
+  #cleanOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.88);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+  #cleanOverlay.active { display: flex; }
+
+  .clean-box {
+    background: var(--panel);
+    border: 3px solid var(--pink);
+    border-radius: 18px;
+    padding: 22px 20px 20px;
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 0 60px rgba(244,114,182,0.45);
+  }
+
+  .clean-title { font-size: 10px; color: var(--pink); letter-spacing: 2px; }
+  .clean-subtitle {
+    font-family: 'VT323', monospace;
+    font-size: 17px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  #cleanCanvas {
+    display: block;
+    touch-action: none;
+    cursor: crosshair;
+  }
+
+  .clean-progress-bg {
+    width: 100%;
+    height: 10px;
+    background: #0d0d1f;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .clean-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--pink), #fbcfe8);
+    border-radius: 5px;
+    transition: width 0.2s ease;
+    width: 0%;
+  }
+
+  .clean-status {
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    color: var(--muted);
+    text-align: center;
+    min-height: 26px;
+  }
+
+  .clean-result {
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    text-align: center;
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+  }
+  .clean-result.show { display: flex; }
+
+  .clean-close-btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    padding: 10px 20px;
+    background: var(--pink);
+    border: 2px solid #fbcfe8;
+    border-radius: 8px;
+    color: #0a0a1a;
+    cursor: pointer;
+    transition: all 0.1s;
+    touch-action: manipulation;
+  }
+  .clean-close-btn:hover { background: #fbcfe8; }
+
+  /* ---- MINIGIOCO COCCOLA ---- */
+  #petGameOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.88);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+  #petGameOverlay.active { display: flex; }
+
+  .petgame-box {
+    background: var(--panel);
+    border: 3px solid var(--accent2);
+    border-radius: 18px;
+    padding: 22px 20px 20px;
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 0 60px rgba(192,132,252,0.45);
+  }
+
+  .petgame-title { font-size: 10px; color: var(--accent2); letter-spacing: 2px; }
+  .petgame-subtitle { font-family: 'VT323', monospace; font-size: 17px; color: var(--muted); text-align: center; }
+
+  #petGameCanvas {
+    display: block;
+    border-radius: 12px;
+    border: 2px solid rgba(192,132,252,0.4);
+    background: #110d22;
+    touch-action: none;
+    cursor: pointer;
+  }
+
+  .petgame-hearts {
+    font-size: 22px;
+    letter-spacing: 6px;
+    min-height: 30px;
+    text-align: center;
+  }
+
+  .petgame-status {
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    color: var(--muted);
+    text-align: center;
+    min-height: 26px;
+  }
+
+  .petgame-result {
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    text-align: center;
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+  }
+  .petgame-result.show { display: flex; }
+
+  .petgame-close-btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    padding: 10px 20px;
+    background: var(--accent);
+    border: 2px solid var(--accent2);
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.1s;
+    touch-action: manipulation;
+  }
+  .petgame-close-btn:hover { background: var(--accent2); }
+
+  @media (max-width: 700px) {
+    .petgame-box { width: calc(100vw - 32px); max-width: 340px; padding: 18px 14px; }
+  }
+
+  /* ---- MINIGIOCO PASTO ---- */
+  #feedGameOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.88);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+  #feedGameOverlay.active { display: flex; }
+
+  .feedgame-box {
+    background: var(--panel);
+    border: 3px solid var(--green);
+    border-radius: 18px;
+    padding: 22px 20px 20px;
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 0 60px rgba(74,222,128,0.35);
+  }
+
+  .feedgame-title { font-size: 10px; color: var(--green); letter-spacing: 2px; }
+
+  /* Fumetto con la richiesta di Pan */
+  .feedgame-bubble-wrap {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 10px;
+  }
+
+  .feedgame-pan-emoji { font-size: 48px; line-height: 1; flex-shrink: 0; }
+
+  .feedgame-bubble {
+    background: var(--panel2);
+    border: 2px solid var(--green);
+    border-radius: 14px 14px 14px 4px;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    position: relative;
+  }
+  .feedgame-bubble::before {
+    content: '';
+    position: absolute;
+    bottom: 8px; left: -10px;
+    border: 5px solid transparent;
+    border-right-color: var(--green);
+  }
+
+  .feedgame-want-label {
+    font-family: 'VT323', monospace;
+    font-size: 15px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+  .feedgame-want-item {
+    font-size: 36px;
+    line-height: 1;
+    filter: drop-shadow(0 0 8px rgba(74,222,128,0.6));
+    animation: feedbounce 0.7s ease-in-out infinite alternate;
+  }
+  .feedgame-want-name {
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    color: var(--green);
+    letter-spacing: 1px;
+  }
+
+  @keyframes feedbounce {
+    from { transform: scale(1); }
+    to   { transform: scale(1.12); }
+  }
+
+  /* Griglia scelte */
+  .feedgame-choices {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    width: 100%;
+  }
+
+  .feedgame-choice {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    padding: 12px 6px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: var(--panel2);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.12s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .feedgame-choice .fc-icon { font-size: 26px; }
+  .feedgame-choice:hover { background: #1a3520; border-color: var(--green); transform: translateY(-2px); }
+  .feedgame-choice:active { transform: translateY(0); }
+  .feedgame-choice.correct {
+    background: #166534; border-color: var(--green);
+    animation: feedpop 0.3s ease;
+  }
+  .feedgame-choice.wrong {
+    background: #7f1d1d; border-color: var(--red);
+    animation: feedshake 0.3s ease;
+  }
+  .feedgame-choice:disabled { cursor: default; pointer-events: none; }
+
+  @keyframes feedpop   { 0%{transform:scale(1)} 50%{transform:scale(1.15)} 100%{transform:scale(1)} }
+  @keyframes feedshake { 0%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} 100%{transform:translateX(0)} }
+
+  .feedgame-status {
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    color: var(--muted);
+    text-align: center;
+    min-height: 26px;
+  }
+
+  .feedgame-score {
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    color: var(--muted);
+    letter-spacing: 2px;
+  }
+
+  .feedgame-result {
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    text-align: center;
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+  }
+  .feedgame-result.show { display: flex; }
+
+  .feedgame-close-btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    padding: 10px 20px;
+    background: var(--green);
+    border: 2px solid #86efac;
+    border-radius: 8px;
+    color: #0a1a0d;
+    cursor: pointer;
+    transition: all 0.1s;
+    touch-action: manipulation;
+  }
+  .feedgame-close-btn:hover { background: #86efac; }
+
+  @media (max-width: 700px) {
+    .feedgame-box { width: calc(100vw - 32px); max-width: 340px; padding: 18px 14px; }
+    .feedgame-choice .fc-icon { font-size: 22px; }
+  }
 </style>
 </head>
 <body>
@@ -1299,6 +1636,69 @@
       <div id="mgResultText" style="color:var(--accent2)"></div>
       <div id="mgResultBonus" style="color:var(--gold); font-size:16px"></div>
       <button class="mg-close-btn" onclick="closeMinigame()">✔ CHIUDI</button>
+    </div>
+  </div>
+</div>
+
+<!-- MINIGIOCO PASTO -->
+<div id="feedGameOverlay">
+  <div class="feedgame-box">
+    <div class="feedgame-title">🍽️ ORA DI MANGIARE!</div>
+    <div class="feedgame-bubble-wrap">
+      <canvas id="fgPanCanvas" width="60" height="54" style="image-rendering:pixelated;width:72px;height:65px;flex-shrink:0;"></canvas>
+      <div class="feedgame-bubble">
+        <div class="feedgame-want-label">Voglio...</div>
+        <div class="feedgame-want-item" id="fgWantIcon">🍖</div>
+        <div class="feedgame-want-name" id="fgWantName">CARNE</div>
+      </div>
+    </div>
+    <div class="feedgame-choices" id="fgChoices"></div>
+    <div class="feedgame-score" id="fgScore"></div>
+    <div class="feedgame-status" id="fgStatus">Dagli quello che vuole!</div>
+    <div class="feedgame-result" id="fgResult">
+      <div id="fgResultEmoji" style="font-size:36px">😋</div>
+      <div id="fgResultText" style="color:var(--green)"></div>
+      <div id="fgResultBonus" style="color:var(--gold); font-size:16px"></div>
+      <button class="feedgame-close-btn" onclick="closeFeedGame()">✔ CHIUDI</button>
+    </div>
+  </div>
+</div>
+
+<!-- MINIGIOCO PULIZIA -->
+<div id="cleanOverlay">
+  <div class="clean-box">
+    <div class="clean-title">🛁 BAGNETTO DI PAN</div>
+    <div class="clean-subtitle">Strofina via tutte le macchie!</div>
+    <div style="position:relative;width:272px;height:200px;border-radius:12px;overflow:hidden;border:2px solid rgba(244,114,182,0.4);">
+      <canvas id="cleanCanvasBg"  width="272" height="200" style="position:absolute;top:0;left:0;touch-action:none;"></canvas>
+      <canvas id="cleanCanvas"    width="272" height="200" style="position:absolute;top:0;left:0;touch-action:none;cursor:crosshair;"></canvas>
+    </div>
+    <div class="clean-progress-bg">
+      <div class="clean-progress-bar" id="cleanProgressBar"></div>
+    </div>
+    <div class="clean-status" id="cleanStatus">Strofina con il dito o il mouse 🧽</div>
+    <div class="clean-result" id="cleanResult">
+      <div id="cleanResultEmoji" style="font-size:36px">✨</div>
+      <div id="cleanResultText" style="color:var(--pink)">PAN È PULITO!</div>
+      <div id="cleanResultBonus" style="color:var(--gold); font-size:16px"></div>
+      <button class="clean-close-btn" onclick="closeClean()">✔ CHIUDI</button>
+    </div>
+  </div>
+</div>
+
+<!-- MINIGIOCO COCCOLA -->
+<div id="petGameOverlay">
+  <div class="petgame-box">
+    <div class="petgame-title">🫶 COCCOLA PAN</div>
+    <div class="petgame-subtitle">Accarezza Pan passando sopra di lui!</div>
+    <canvas id="petGameCanvas" width="272" height="200"></canvas>
+    <div class="petgame-hearts" id="petGameHearts">🤍🤍🤍🤍🤍</div>
+    <div class="petgame-status" id="petGameStatus">Passa il dito su Pan 🫶</div>
+    <div class="petgame-result" id="petGameResult">
+      <div id="petGameResultEmoji" style="font-size:36px">🥰</div>
+      <div id="petGameResultText" style="color:var(--accent2)">PAN È FELICE!</div>
+      <div id="petGameResultBonus" style="color:var(--gold); font-size:16px"></div>
+      <button class="petgame-close-btn" onclick="closePetGame()">✔ CHIUDI</button>
     </div>
   </div>
 </div>
@@ -1623,6 +2023,27 @@ const ACTIONS = {
 window.doAction = function(action) {
   if (isDead && action !== 'medicine') {
     showNotif('💀 Pan è morto! Dagli le medicine!');
+    return;
+  }
+
+  // Pasto → minigioco
+  if (action === 'feed') {
+    if (petState && petState.sleeping) { showNotif('😴 Pan sta dormendo!'); return; }
+    openFeedGame();
+    return;
+  }
+
+  // Pulizia → minigioco
+  if (action === 'clean') {
+    if (petState && petState.sleeping) { showNotif('😴 Pan sta dormendo!'); return; }
+    openCleanGame();
+    return;
+  }
+
+  // Coccola → minigioco
+  if (action === 'pet') {
+    if (petState && petState.sleeping) { showNotif('😴 Pan sta dormendo!'); return; }
+    openPetGame();
     return;
   }
 
@@ -2227,6 +2648,9 @@ document.addEventListener('keydown', (e) => {
     window.closeGameSelect();
     window.closeMg2();
     window.closeMg3();
+    window.closeClean();
+    window.closePetGame();
+    window.closeFeedGame();
   }
   // Supporto tastiera per il minigioco
   if (mgActive && !mgAnswered) {
@@ -2236,6 +2660,629 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight') window.mgPress(3);
   }
 });
+
+// ─────────────── MINIGIOCO PULIZIA ───────────────
+// Tecnica a 2 canvas sovrapposti:
+//   cleanCanvasBg  = sfondo fisso (Pan + stelle)
+//   cleanCanvas    = layer sporcizia opaco, si "gratta via" con destination-out
+//                    → quando un pixel diventa trasparente si vede il BG sotto
+
+const CLEAN_BRUSH = 26;
+const CLEAN_SPOTS = 13;
+
+let cleanCanvas, cleanCtx, cleanBgCanvas, cleanBgCtx;
+let cleanDone = false;
+let _cleanPainting = false;
+// Pixel iniziali opachi del layer sporcizia (per calcolare %)
+let cleanInitialOpaque = 0;
+
+document.addEventListener('mouseup', () => { _cleanPainting = false; });
+
+function openCleanGame() {
+  cleanCanvas   = document.getElementById('cleanCanvas');
+  cleanCtx      = cleanCanvas.getContext('2d');
+  cleanBgCanvas = document.getElementById('cleanCanvasBg');
+  cleanBgCtx    = cleanBgCanvas.getContext('2d');
+  cleanDone     = false;
+  _cleanPainting = false;
+
+  document.getElementById('cleanResult').classList.remove('show');
+  document.getElementById('cleanStatus').textContent = 'Strofina con il dito o il mouse 🧽';
+  document.getElementById('cleanProgressBar').style.width = '0%';
+  document.getElementById('cleanOverlay').classList.add('active');
+
+  _cleanDrawBg();
+  _cleanDrawDirt();
+
+  // misura pixel opachi iniziali
+  const W = cleanCanvas.width, H = cleanCanvas.height;
+  const d = cleanCtx.getImageData(0, 0, W, H).data;
+  cleanInitialOpaque = 0;
+  for (let i = 3; i < d.length; i += 4) if (d[i] > 30) cleanInitialOpaque++;
+
+  cleanCanvas.addEventListener('mousemove',  _cleanOnMove);
+  cleanCanvas.addEventListener('mousedown',  _cleanOnDown);
+  cleanCanvas.addEventListener('touchmove',  _cleanOnTouch, { passive: false });
+  cleanCanvas.addEventListener('touchstart', _cleanOnTouch, { passive: false });
+}
+
+// ── Sfondo: colore scuro + Pan disegnato pixel-art ──
+function _cleanDrawBg() {
+  const W = cleanBgCanvas.width, H = cleanBgCanvas.height;
+  const ctx = cleanBgCtx;
+  ctx.clearRect(0, 0, W, H);
+
+  // sfondo viola scuro
+  ctx.fillStyle = '#110d22';
+  ctx.fillRect(0, 0, W, H);
+
+  // stelle decorative
+  ctx.fillStyle = 'rgba(255,255,255,0.5)';
+  const stars = [[20,15],[60,30],[200,12],[240,40],[130,8],[80,55],[250,80],[10,90],[260,150],[140,190],[30,170],[180,50]];
+  stars.forEach(([x,y]) => { ctx.fillRect(x,y,2,2); });
+
+  // Disegna Pan (pixel-art scalato) al centro-basso
+  // Riuso la palette e lo sprite dal codice principale
+  const scale = 3;
+  const sprW  = 20 * scale;   // 60px
+  const sprH  = 18 * scale;   // 54px
+  const ox = Math.floor((W - sprW) / 2);
+  const oy = Math.floor((H - sprH) / 2) + 10;
+
+  const localP = ['', '#1a0800', '#6B3008', '#954818', '#C07030', '#D4A060', '#EDCB90', '#FFFFFF', '#FF9090'];
+  for (let row = 0; row < ferretSprite.length; row++) {
+    for (let col = 0; col < ferretSprite[row].length; col++) {
+      const v = ferretSprite[row][col];
+      if (!v) continue;
+      ctx.fillStyle = localP[v];
+      ctx.fillRect(ox + col * scale, oy + row * scale, scale, scale);
+    }
+  }
+
+  // testo "PULITO!" in basso
+  ctx.font = '10px "Press Start 2P", monospace';
+  ctx.fillStyle = 'rgba(244,114,182,0.5)';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'bottom';
+  ctx.fillText('✨ PULITO! ✨', W/2, H - 6);
+}
+
+// ── Layer sporcizia: sfondo marrone + macchie colorate ──
+function _cleanDrawDirt() {
+  const W = cleanCanvas.width, H = cleanCanvas.height;
+  const ctx = cleanCtx;
+  ctx.clearRect(0, 0, W, H);
+
+  // Riempi tutto con colore fango base
+  ctx.fillStyle = '#2d1a08';
+  ctx.fillRect(0, 0, W, H);
+
+  // Macchie colorate sopra
+  const colors = ['#854d0e','#7c2d12','#3f6212','#5b21b6','#831843','#0e4f5c','#92400e','#1e3a5f'];
+  for (let i = 0; i < CLEAN_SPOTS; i++) {
+    const x = 15 + Math.random() * (W - 30);
+    const y = 15 + Math.random() * (H - 30);
+    const r = 20 + Math.random() * 28;
+    const c = colors[i % colors.length];
+    ctx.save();
+    const grad = ctx.createRadialGradient(x, y, 0, x, y, r);
+    grad.addColorStop(0,   c + 'ff');
+    grad.addColorStop(0.5, c + 'cc');
+    grad.addColorStop(1,   c + '44');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // Label sporco
+  ctx.font = '9px "Press Start 2P", monospace';
+  ctx.fillStyle = 'rgba(255,200,100,0.25)';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  ctx.fillText('~ SPORCO ~', W/2, 6);
+}
+
+function _cleanOnDown(e) { _cleanPainting = true; _cleanScrubFromMouse(e); }
+
+function _cleanOnMove(e) {
+  if (!_cleanPainting || cleanDone) return;
+  _cleanScrubFromMouse(e);
+}
+
+function _cleanScrubFromMouse(e) {
+  const r = cleanCanvas.getBoundingClientRect();
+  const scaleX = cleanCanvas.width  / r.width;
+  const scaleY = cleanCanvas.height / r.height;
+  _cleanScrub((e.clientX - r.left) * scaleX, (e.clientY - r.top) * scaleY);
+}
+
+function _cleanOnTouch(e) {
+  e.preventDefault();
+  if (cleanDone) return;
+  const r = cleanCanvas.getBoundingClientRect();
+  const scaleX = cleanCanvas.width  / r.width;
+  const scaleY = cleanCanvas.height / r.height;
+  for (const t of e.changedTouches) {
+    _cleanScrub((t.clientX - r.left) * scaleX, (t.clientY - r.top) * scaleY);
+  }
+}
+
+function _cleanScrub(cx, cy) {
+  if (cleanDone) return;
+
+  // Gratta via la sporcizia (rende trasparente)
+  cleanCtx.save();
+  cleanCtx.globalCompositeOperation = 'destination-out';
+  const grad = cleanCtx.createRadialGradient(cx, cy, 0, cx, cy, CLEAN_BRUSH);
+  grad.addColorStop(0,   'rgba(0,0,0,1)');
+  grad.addColorStop(0.6, 'rgba(0,0,0,0.9)');
+  grad.addColorStop(1,   'rgba(0,0,0,0)');
+  cleanCtx.fillStyle = grad;
+  cleanCtx.beginPath();
+  cleanCtx.arc(cx, cy, CLEAN_BRUSH, 0, Math.PI * 2);
+  cleanCtx.fill();
+  cleanCtx.restore();
+
+  _cleanCheckProgress();
+}
+
+let _cleanLastCheck = 0;
+function _cleanCheckProgress() {
+  const now = Date.now();
+  if (now - _cleanLastCheck < 80) return; // throttle
+  _cleanLastCheck = now;
+
+  const W = cleanCanvas.width, H = cleanCanvas.height;
+  const data = cleanCtx.getImageData(0, 0, W, H).data;
+  let opaque = 0;
+  for (let i = 3; i < data.length; i += 4) if (data[i] > 30) opaque++;
+
+  const removed = cleanInitialOpaque - opaque;
+  const pct = cleanInitialOpaque > 0 ? removed / cleanInitialOpaque : 0;
+  const pctClamped = Math.min(1, Math.max(0, pct));
+
+  document.getElementById('cleanProgressBar').style.width = (pctClamped * 100).toFixed(0) + '%';
+
+  document.getElementById('cleanStatus').textContent =
+      pctClamped < 0.25 ? 'Strofina ancora! 🧽'
+    : pctClamped < 0.55 ? 'Quasi a metà... 💧'
+    : pctClamped < 0.80 ? 'Quasi fatto! ✨'
+    : pctClamped < 0.93 ? 'Ancora un po\'! 🌟'
+    : 'FINITO!';
+
+  if (pctClamped >= 0.93) _cleanFinish();
+}
+
+function _cleanFinish() {
+  if (cleanDone) return;
+  cleanDone = true;
+  cleanCanvas.removeEventListener('mousemove',  _cleanOnMove);
+  cleanCanvas.removeEventListener('mousedown',  _cleanOnDown);
+  cleanCanvas.removeEventListener('touchmove',  _cleanOnTouch);
+  cleanCanvas.removeEventListener('touchstart', _cleanOnTouch);
+
+  // Cancella il residuo sporcizia con fade
+  cleanCtx.clearRect(0, 0, cleanCanvas.width, cleanCanvas.height);
+
+  document.getElementById('cleanProgressBar').style.width = '100%';
+  document.getElementById('cleanStatus').textContent = '✨ PULITO! ✨';
+
+  const cleanBonus = 40, moodBonus = 15;
+  const newState = {
+    ...petState,
+    clean:  Math.min(100, (petState.clean  || 0) + cleanBonus),
+    mood:   Math.min(100, (petState.mood   || 0) + moodBonus),
+    energy: Math.max(0,   (petState.energy || 0) - 5),
+    lastUpdate: Date.now()
+  };
+  petState = newState;
+  set(petRef, newState);
+  startAnim();
+
+  const nick = document.getElementById('nickInput').value.trim() || 'Anonimo';
+  pushChatMsg(nick, '🛁 ha fatto il bagnetto a Pan! +' + cleanBonus + ' pulizia', 'action');
+
+  setTimeout(() => {
+    document.getElementById('cleanResultBonus').textContent = `+${cleanBonus} PULIZIA 🛁  +${moodBonus} UMORE ❤️`;
+    document.getElementById('cleanResult').classList.add('show');
+  }, 350);
+}
+
+window.closeClean = function() {
+  document.getElementById('cleanOverlay').classList.remove('active');
+  cleanDone = true;
+  if (cleanCanvas) {
+    cleanCanvas.removeEventListener('mousemove',  _cleanOnMove);
+    cleanCanvas.removeEventListener('mousedown',  _cleanOnDown);
+    cleanCanvas.removeEventListener('touchmove',  _cleanOnTouch);
+    cleanCanvas.removeEventListener('touchstart', _cleanOnTouch);
+  }
+};
+
+window.openCleanGame = openCleanGame;
+
+// ─────────────── MINIGIOCO COCCOLA ───────────────
+// Pan è disegnato sul canvas. Devi passare il cursore/dito su di lui.
+// Ogni pixel "accarezzato" della hitbox di Pan conta.
+// Quando hai coperto abbastanza, si riempiono i cuori e finisce.
+
+const PET_HEARTS_TOTAL = 5;
+const PET_SCALE        = 4;   // scala pixel art nel canvas coccola (più grande)
+const PET_THRESHOLD    = 0.72; // % hitbox da coprire per completare
+
+let pgCanvas, pgCtx;
+let pgDone = false;
+let pgHeartsFilled = 0;
+// Mappa hitbox Pan: array di {x,y,r} zone da accarezzare
+let pgZones = [];
+let pgZoneCoverage = []; // quanto è stata coperta ogni zona (0..1)
+let pgFloatingHearts = []; // cuoricini animati
+
+function openPetGame() {
+  pgCanvas = document.getElementById('petGameCanvas');
+  pgCtx    = pgCanvas.getContext('2d');
+  pgDone   = false;
+  pgHeartsFilled = 0;
+  pgFloatingHearts = [];
+
+  document.getElementById('petGameResult').classList.remove('show');
+  document.getElementById('petGameStatus').textContent = 'Passa il dito su Pan 🫶';
+  document.getElementById('petGameHearts').textContent = '🤍🤍🤍🤍🤍';
+  document.getElementById('petGameOverlay').classList.add('active');
+
+  _pgSetupZones();
+  _pgDraw();
+
+  pgCanvas.addEventListener('mousemove',  _pgOnMove);
+  pgCanvas.addEventListener('touchmove',  _pgOnTouch, { passive: false });
+  pgCanvas.addEventListener('touchstart', _pgOnTouch, { passive: false });
+
+  // Loop animazione
+  pgCanvas._animId = requestAnimationFrame(_pgAnimLoop);
+}
+
+function _pgSetupZones() {
+  const W = pgCanvas.width, H = pgCanvas.height;
+  const s = PET_SCALE;
+  // Il furetto è centrato — le zone coprono testa, corpo, zampe
+  const ox = Math.floor((W - 20*s) / 2);
+  const oy = Math.floor((H - 18*s) / 2) - 4;
+
+  // Zone: testa, corpo sx, corpo dx, pancia, coda, zampette
+  pgZones = [
+    { x: ox + 5*s,  y: oy + 3*s,  r: 3.5*s }, // testa
+    { x: ox + 5*s,  y: oy + 10*s, r: 3*s   }, // corpo sx
+    { x: ox + 9*s,  y: oy + 11*s, r: 3*s   }, // corpo dx
+    { x: ox + 6*s,  y: oy + 14*s, r: 2.5*s }, // pancia
+    { x: ox + 15*s, y: oy + 13*s, r: 2*s   }, // coda
+    { x: ox + 3*s,  y: oy + 17*s, r: 2*s   }, // zampette
+  ];
+  pgZoneCoverage = pgZones.map(() => 0);
+}
+
+function _pgDraw() {
+  const W = pgCanvas.width, H = pgCanvas.height;
+  const ctx = pgCtx;
+  ctx.clearRect(0, 0, W, H);
+
+  // Sfondo
+  ctx.fillStyle = '#110d22';
+  ctx.fillRect(0, 0, W, H);
+
+  // Stelline
+  ctx.fillStyle = 'rgba(255,255,255,0.4)';
+  [[18,14],[55,28],[195,11],[238,38],[125,7],[75,52],[248,78],[8,88],[258,148],[138,188],[28,168],[176,48]].forEach(([x,y]) => {
+    ctx.fillRect(x,y,2,2);
+  });
+
+  // Pan pixel-art (scala 4)
+  const s = PET_SCALE;
+  const ox = Math.floor((W - 20*s) / 2);
+  const oy = Math.floor((H - 18*s) / 2) - 4;
+  const localP = ['', '#1a0800', '#6B3008', '#954818', '#C07030', '#D4A060', '#EDCB90', '#FFFFFF', '#FF9090'];
+
+  for (let row = 0; row < ferretSprite.length; row++) {
+    for (let col = 0; col < ferretSprite[row].length; col++) {
+      const v = ferretSprite[row][col];
+      if (!v) continue;
+      ctx.fillStyle = localP[v];
+      ctx.fillRect(ox + col*s, oy + row*s, s, s);
+    }
+  }
+
+  // Evidenzia zone accarezzate con glow viola
+  pgZones.forEach((z, i) => {
+    const cov = pgZoneCoverage[i];
+    if (cov > 0.05) {
+      ctx.save();
+      ctx.globalAlpha = cov * 0.45;
+      const g = ctx.createRadialGradient(z.x, z.y, 0, z.x, z.y, z.r * 1.2);
+      g.addColorStop(0, '#c084fc');
+      g.addColorStop(1, 'transparent');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(z.x, z.y, z.r * 1.2, 0, Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    }
+  });
+
+  // Cuoricini fluttuanti
+  pgFloatingHearts.forEach(h => {
+    ctx.save();
+    ctx.globalAlpha = h.alpha;
+    ctx.font = `${h.size}px serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText('💜', h.x, h.y);
+    ctx.restore();
+  });
+
+  // Label
+  ctx.font = '9px "Press Start 2P", monospace';
+  ctx.fillStyle = 'rgba(192,132,252,0.3)';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'bottom';
+  ctx.fillText('🫶 ACCAREZZA', W/2, H - 6);
+}
+
+function _pgAnimLoop() {
+  if (pgDone) return;
+  // Aggiorna cuoricini
+  pgFloatingHearts = pgFloatingHearts
+    .map(h => ({ ...h, y: h.y - 1.2, alpha: h.alpha - 0.018, size: h.size + 0.3 }))
+    .filter(h => h.alpha > 0);
+  _pgDraw();
+  pgCanvas._animId = requestAnimationFrame(_pgAnimLoop);
+}
+
+function _pgOnMove(e) {
+  if (pgDone) return;
+  const r = pgCanvas.getBoundingClientRect();
+  const sx = pgCanvas.width / r.width, sy = pgCanvas.height / r.height;
+  _pgStroke((e.clientX - r.left)*sx, (e.clientY - r.top)*sy);
+}
+
+function _pgOnTouch(e) {
+  e.preventDefault();
+  if (pgDone) return;
+  const r = pgCanvas.getBoundingClientRect();
+  const sx = pgCanvas.width / r.width, sy = pgCanvas.height / r.height;
+  for (const t of e.changedTouches) _pgStroke((t.clientX - r.left)*sx, (t.clientY - r.top)*sy);
+}
+
+function _pgStroke(cx, cy) {
+  let hitAny = false;
+  pgZones.forEach((z, i) => {
+    const dx = cx - z.x, dy = cy - z.y;
+    if (dx*dx + dy*dy <= z.r*z.r) {
+      pgZoneCoverage[i] = Math.min(1, pgZoneCoverage[i] + 0.055);
+      hitAny = true;
+    }
+  });
+
+  if (hitAny) {
+    // spawna cuoricino
+    if (Math.random() < 0.35) {
+      pgFloatingHearts.push({ x: cx + (Math.random()-0.5)*20, y: cy - 10, alpha: 0.9, size: 14 });
+    }
+    _pgCheckProgress();
+  }
+}
+
+function _pgCheckProgress() {
+  const total = pgZones.length;
+  const avgCov = pgZoneCoverage.reduce((a,b) => a+b, 0) / total;
+
+  // Cuori proporzionali alla coverage media → 0..5 quando avgCov raggiunge 0.8
+  const hearts = Math.min(PET_HEARTS_TOTAL, Math.floor(avgCov * PET_HEARTS_TOTAL / 0.8));
+  if (hearts !== pgHeartsFilled) {
+    pgHeartsFilled = hearts;
+    document.getElementById('petGameHearts').textContent =
+      '💜'.repeat(hearts) + '🤍'.repeat(PET_HEARTS_TOTAL - hearts);
+  }
+
+  document.getElementById('petGameStatus').textContent =
+      avgCov < 0.2  ? "Accarezzalo un po'! 🐾"
+    : avgCov < 0.45 ? 'A Pan piace! 😊'
+    : avgCov < 0.65 ? 'Continua... 🥰'
+    : avgCov < 0.78 ? 'Quasi finito! 💜'
+    : 'FATTO!';
+
+  // Finisce appena i cuori sono tutti pieni
+  if (avgCov >= 0.8) _pgFinish();
+}
+
+function _pgFinish() {
+  if (pgDone) return;
+  pgDone = true;
+  cancelAnimationFrame(pgCanvas._animId);
+  pgCanvas.removeEventListener('mousemove', _pgOnMove);
+  pgCanvas.removeEventListener('touchmove', _pgOnTouch);
+  pgCanvas.removeEventListener('touchstart', _pgOnTouch);
+
+  // Disegna Pan felice (cuoricini dappertutto)
+  _pgDraw();
+  document.getElementById('petGameHearts').textContent = '💜💜💜💜💜';
+  document.getElementById('petGameStatus').textContent = '🥰 PAN È FELICISSIMO!';
+
+  const moodBonus = 30, funBonus = 10;
+  const newState = {
+    ...petState,
+    mood:   Math.min(100, (petState.mood  || 0) + moodBonus),
+    fun:    Math.min(100, (petState.fun   || 0) + funBonus),
+    energy: Math.max(0,   (petState.energy|| 0) - 3),
+    lastUpdate: Date.now()
+  };
+  petState = newState;
+  set(petRef, newState);
+  startAnim();
+
+  const nick = document.getElementById('nickInput').value.trim() || 'Anonimo';
+  pushChatMsg(nick, '🫶 ha coccolato Pan! +' + moodBonus + ' umore', 'action');
+
+  setTimeout(() => {
+    document.getElementById('petGameResultBonus').textContent = `+${moodBonus} UMORE ❤️  +${funBonus} DIVERT. 🎮`;
+    document.getElementById('petGameResult').classList.add('show');
+  }, 350);
+}
+
+window.closePetGame = function() {
+  document.getElementById('petGameOverlay').classList.remove('active');
+  pgDone = true;
+  if (pgCanvas) {
+    cancelAnimationFrame(pgCanvas._animId);
+    pgCanvas.removeEventListener('mousemove', _pgOnMove);
+    pgCanvas.removeEventListener('touchmove', _pgOnTouch);
+    pgCanvas.removeEventListener('touchstart', _pgOnTouch);
+  }
+};
+
+window.openPetGame = openPetGame;
+
+// ─────────────── MINIGIOCO PASTO ───────────────
+// Pan chiede un cibo/bevanda specifico; l'utente sceglie tra 4 opzioni.
+// 3 round — ogni round corretto aumenta il bonus finale.
+
+const FG_ROUNDS = 3;
+const FG_ITEMS = [
+  { icon: '🍖', name: 'CARNE',    type: 'cibo'     },
+  { icon: '🐟', name: 'PESCE',    type: 'cibo'     },
+  { icon: '🥕', name: 'CAROTA',   type: 'cibo'     },
+  { icon: '🍗', name: 'POLLO',    type: 'cibo'     },
+  { icon: '🍚', name: 'RISO',     type: 'cibo'     },
+  { icon: '🥚', name: 'UOVO',     type: 'cibo'     },
+  { icon: '🫐', name: 'MIRTILLI', type: 'cibo'     },
+  { icon: '🧀', name: 'FORMAGGIO',type: 'cibo'     },
+  { icon: '💧', name: 'ACQUA',    type: 'bevanda'  },
+  { icon: '🥛', name: 'LATTE',    type: 'bevanda'  },
+  { icon: '🧃', name: 'SUCCO',    type: 'bevanda'  },
+  { icon: '🫖', name: 'TÈ',       type: 'bevanda'  },
+];
+
+let fgRound = 0, fgScore = 0, fgDone = false, fgTarget = null;
+
+function openFeedGame() {
+  fgRound = 0; fgScore = 0; fgDone = false;
+  document.getElementById('fgResult').classList.remove('show');
+  document.getElementById('fgChoices').style.display = 'grid';
+  document.getElementById('fgScore').textContent = '';
+  document.getElementById('feedGameOverlay').classList.add('active');
+
+  // Disegna Pan sul canvas del fumetto
+  const c = document.getElementById('fgPanCanvas');
+  const cx = c.getContext('2d');
+  cx.clearRect(0, 0, 60, 54);
+  const localP = ['','#1a0800','#6B3008','#954818','#C07030','#D4A060','#EDCB90','#FFFFFF','#FF9090'];
+  const s = 3;
+  for (let row = 0; row < ferretSprite.length; row++)
+    for (let col = 0; col < ferretSprite[row].length; col++) {
+      const v = ferretSprite[row][col];
+      if (!v) continue;
+      cx.fillStyle = localP[v];
+      cx.fillRect(col*s, row*s, s, s);
+    }
+
+  _fgNextRound();
+}
+
+function _fgNextRound() {
+  if (fgRound >= FG_ROUNDS) { _fgEnd(); return; }
+  fgRound++;
+
+  // Scegli target casuale
+  fgTarget = FG_ITEMS[Math.floor(Math.random() * FG_ITEMS.length)];
+
+  // 3 distrattori diversi dal target
+  const pool = FG_ITEMS.filter(i => i.icon !== fgTarget.icon);
+  const wrong = [];
+  while (wrong.length < 3) {
+    const pick = pool[Math.floor(Math.random() * pool.length)];
+    if (!wrong.find(w => w.icon === pick.icon)) wrong.push(pick);
+  }
+  const choices = [...wrong, fgTarget].sort(() => Math.random() - 0.5);
+
+  // Aggiorna fumetto
+  document.getElementById('fgWantIcon').textContent = fgTarget.icon;
+  document.getElementById('fgWantName').textContent = fgTarget.name;
+
+  // Stato
+  const typeLabel = fgTarget.type === 'bevanda' ? 'una bevanda' : 'del cibo';
+  document.getElementById('fgStatus').textContent = `Round ${fgRound}/${FG_ROUNDS} — Dagli ${typeLabel}!`;
+  document.getElementById('fgScore').textContent = `✅ ${fgScore}/${fgRound - 1}`;
+
+  // Render bottoni
+  const grid = document.getElementById('fgChoices');
+  grid.innerHTML = '';
+  choices.forEach(item => {
+    const btn = document.createElement('button');
+    btn.className = 'feedgame-choice';
+    btn.innerHTML = `<span class="fc-icon">${item.icon}</span>${item.name}`;
+    btn.onclick = () => _fgPick(item, btn, grid);
+    grid.appendChild(btn);
+  });
+}
+
+function _fgPick(item, btn, grid) {
+  // Disabilita tutti
+  grid.querySelectorAll('.feedgame-choice').forEach(b => b.disabled = true);
+
+  if (item.icon === fgTarget.icon) {
+    btn.classList.add('correct');
+    fgScore++;
+    document.getElementById('fgStatus').textContent = '😋 ESATTO!';
+  } else {
+    btn.classList.add('wrong');
+    // Evidenzia quello giusto
+    grid.querySelectorAll('.feedgame-choice').forEach(b => {
+      if (b.querySelector('.fc-icon').textContent === fgTarget.icon) b.classList.add('correct');
+    });
+    document.getElementById('fgStatus').textContent = `❌ Voleva ${fgTarget.icon} ${fgTarget.name}!`;
+  }
+
+  setTimeout(() => _fgNextRound(), 900);
+}
+
+function _fgEnd() {
+  fgDone = true;
+  document.getElementById('fgChoices').style.display = 'none';
+
+  const pct = fgScore / FG_ROUNDS;
+  let hungerBonus, emoji, text;
+  if (pct >= 1)        { hungerBonus = 40; emoji = '🏆'; text = 'PERFETTO! PAN È SAZIO!'; }
+  else if (pct >= 0.6) { hungerBonus = 25; emoji = '😋'; text = 'BENE! PAN HA MANGIATO!'; }
+  else                 { hungerBonus = 12; emoji = '😕'; text = 'PAN VOLEVA ALTRO...'; }
+
+  document.getElementById('fgResultEmoji').textContent = emoji;
+  document.getElementById('fgResultText').textContent  = `${fgScore}/${FG_ROUNDS} CORRETTI — ${text}`;
+  document.getElementById('fgResultBonus').textContent = `+${hungerBonus} FAME 🍖`;
+  document.getElementById('fgScore').textContent = `✅ ${fgScore}/${FG_ROUNDS}`;
+  document.getElementById('fgStatus').textContent = '';
+  document.getElementById('fgResult').classList.add('show');
+
+  const newState = {
+    ...petState,
+    hunger: Math.min(100, (petState.hunger || 0) + hungerBonus),
+    mood:   Math.min(100, (petState.mood   || 0) + Math.round(hungerBonus * 0.3)),
+    energy: Math.min(100, (petState.energy || 0) + 5),
+    clean:  Math.max(0,   (petState.clean  || 0) - 3),
+    lastUpdate: Date.now()
+  };
+  petState = newState;
+  set(petRef, newState);
+  startAnim();
+
+  const nick = document.getElementById('nickInput').value.trim() || 'Anonimo';
+  pushChatMsg(nick, `🍽️ ha dato da mangiare a Pan! [${fgScore}/${FG_ROUNDS}] +${hungerBonus} fame`, 'action');
+}
+
+window.closeFeedGame = function() {
+  document.getElementById('feedGameOverlay').classList.remove('active');
+  fgDone = true;
+};
+
+window.openFeedGame = openFeedGame;
 
 </script>
 </body>
