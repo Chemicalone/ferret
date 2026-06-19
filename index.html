@@ -2169,6 +2169,15 @@ function applyDecay(s) {
     newS[k] = Math.max(0, Math.min(100, newS[k]));
   }
 
+  // Sveglia automatica: se dorme, l'energia è piena e NON siamo nella fascia orario
+  // notturna (19:30-07:30), Pan si svegli da solo perché non ha più sonno.
+  let justWokeUp = false;
+  if (newS.sleeping && !newS.dead && Math.round(newS.energy) >= 100 && !isSleepHours()) {
+    newS.sleeping = false;
+    justWokeUp = true;
+  }
+  newS._justWokeUp = justWokeUp;
+
   // Stato critico: invece di morire subito, entra "in pericolo" — c'è una chance
   // di salvarlo col minigioco di rianimazione. Solo se il minigioco viene perso, muore.
   const avg = (newS.hunger + newS.energy + newS.fun + newS.clean + newS.mood) / 5;
@@ -2197,6 +2206,12 @@ onValue(petRef, (snap) => {
     showNotif('🤒 Pan si è ammalato!');
   }
   delete s._justGotSick;
+  // Notifica se Pan si è svegliato da solo (energia piena, non è ora di nanna)
+  if (s._justWokeUp) {
+    pushChatMsg('🤖 Sistema', '⚡ Pan si è svegliato da solo: ha troppa energia per dormire!', 'system');
+    showNotif('⚡ Pan si è svegliato, troppa energia!');
+  }
+  delete s._justWokeUp;
   petState = s;
   updateUI(s);
   // Salva il decay
@@ -2212,6 +2227,11 @@ setInterval(() => {
     showNotif('🤒 Pan si è ammalato!');
   }
   delete s._justGotSick;
+  if (s._justWokeUp) {
+    pushChatMsg('🤖 Sistema', '⚡ Pan si è svegliato da solo: ha troppa energia per dormire!', 'system');
+    showNotif('⚡ Pan si è svegliato, troppa energia!');
+  }
+  delete s._justWokeUp;
   petState = s;
   set(petRef, s);
 }, 30000);
