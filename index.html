@@ -534,6 +534,41 @@
   .dead-overlay .skull { font-size: 32px; }
   .dead-overlay p { font-size: 8px; color: var(--red); text-align: center; }
 
+  /* ---- DYING OVERLAY (sta per morire) ---- */
+  .dying-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(120,10,10,0.78);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border-radius: 10px;
+    z-index: 10;
+    animation: dyingFlash 0.8s infinite;
+  }
+  .dying-overlay .siren { font-size: 30px; animation: pulse 0.6s infinite; }
+  .dying-overlay p { font-size: 8px; color: #ffd5d5; text-align: center; letter-spacing: 1px; }
+  .dying-overlay .save-btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    padding: 10px 14px;
+    background: var(--red);
+    border: 2px solid #fca5a5;
+    border-radius: 10px;
+    color: #1a0a0a;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 40px;
+    animation: pulse 1s infinite;
+  }
+  @keyframes dyingFlash {
+    0%, 100% { background: rgba(120,10,10,0.78); }
+    50%      { background: rgba(185,20,20,0.55); }
+  }
+
   /* ---- MOBILE RESPONSIVE ---- */
   @media (max-width: 700px) {
     body { padding: 12px 10px; }
@@ -1444,6 +1479,142 @@
     .feedgame-box { width: calc(100vw - 32px); max-width: 340px; padding: 18px 14px; }
     .feedgame-choice .fc-icon { font-size: 22px; }
   }
+
+  /* ---- MINIGIOCO RIANIMA PAN (CPR) ---- */
+  #saveGameOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9);
+    z-index: 210;
+    align-items: center;
+    justify-content: center;
+  }
+  #saveGameOverlay.active { display: flex; }
+
+  .savegame-box {
+    background: var(--panel);
+    border: 3px solid var(--red);
+    border-radius: 18px;
+    padding: 24px 20px;
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 0 60px rgba(248,113,113,0.45);
+  }
+
+  .savegame-title {
+    font-size: 11px;
+    color: var(--red);
+    letter-spacing: 2px;
+    text-align: center;
+    animation: pulse 1s infinite;
+  }
+  .savegame-subtitle {
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    color: var(--muted);
+    text-align: center;
+  }
+  .savegame-round-info {
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    color: var(--accent2);
+    letter-spacing: 1px;
+  }
+
+  .savegame-bar-track {
+    position: relative;
+    width: 100%;
+    height: 28px;
+    background: var(--panel2);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .savegame-zone {
+    position: absolute;
+    top: 0; bottom: 0;
+    background: rgba(74,222,128,0.35);
+    border-left: 2px solid var(--green);
+    border-right: 2px solid var(--green);
+  }
+  .savegame-marker {
+    position: absolute;
+    top: -3px; bottom: -3px;
+    width: 6px;
+    background: var(--gold);
+    border-radius: 3px;
+    box-shadow: 0 0 8px var(--gold);
+    transform: translateX(-50%);
+  }
+
+  .savegame-tap-btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 13px;
+    padding: 16px 28px;
+    background: var(--red);
+    border: 3px solid #fca5a5;
+    border-radius: 14px;
+    color: #1a0a0a;
+    cursor: pointer;
+    min-height: 56px;
+    width: 100%;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.08s;
+  }
+  .savegame-tap-btn:active { transform: scale(0.94); }
+
+  .savegame-score-row {
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    color: var(--muted);
+    display: flex;
+    gap: 6px;
+    letter-spacing: 1px;
+  }
+  .savegame-score-val { color: var(--green); font-weight: bold; }
+
+  .savegame-status {
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    color: var(--muted);
+    text-align: center;
+    min-height: 24px;
+  }
+
+  .savegame-result {
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    text-align: center;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+  .savegame-result.show { display: flex; }
+
+  .savegame-close-btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    padding: 10px 20px;
+    background: var(--accent);
+    border: 2px solid var(--accent2);
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .savegame-close-btn:hover { background: var(--accent2); color: #1a0a2a; }
+
+  @media (max-width: 700px) {
+    .savegame-box { width: calc(100vw - 32px); max-width: 340px; padding: 20px 16px; }
+    .savegame-tap-btn { font-size: 11px; padding: 14px 20px; }
+  }
 </style>
 </head>
 <body>
@@ -1464,6 +1635,11 @@
           <div class="emotion-bubble" id="emoBubble">😊</div>
         </div>
         <div class="pet-name" id="petNameDisplay"></div>
+        <div id="dyingOverlay" style="display:none;" class="dying-overlay">
+          <span class="siren">🚨</span>
+          <p>STA PER MORIRE!!</p>
+          <button class="save-btn" onclick="openSaveGame()">❤️ SALVALO ORA!</button>
+        </div>
         <div id="deadOverlay" style="display:none;" class="dead-overlay">
           <span class="skull">💀</span>
           <p>È MORTO...</p>
@@ -1640,6 +1816,30 @@
   </div>
 </div>
 
+<!-- MINIGIOCO RIANIMA PAN (CPR, salvataggio da morte) -->
+<div id="saveGameOverlay">
+  <div class="savegame-box">
+    <div class="savegame-title">🚨 PAN STA MORENDO!</div>
+    <div class="savegame-subtitle">Premi ❤️ ORA! quando la barra è nella zona verde!</div>
+    <div class="savegame-round-info" id="sgRoundInfo">TENTATIVO 1/5</div>
+    <div class="savegame-bar-track" id="sgBarTrack">
+      <div class="savegame-zone" id="sgZone"></div>
+      <div class="savegame-marker" id="sgMarker"></div>
+    </div>
+    <button class="savegame-tap-btn" id="sgTapBtn" onclick="sgTap()">❤️ ORA!</button>
+    <div class="savegame-score-row">
+      <span>SALVATAGGI:</span>
+      <span class="savegame-score-val" id="sgScore">0</span>
+    </div>
+    <div class="savegame-status" id="sgStatus">Preparati...</div>
+    <div class="savegame-result" id="sgResult">
+      <div id="sgResultEmoji" style="font-size:36px">💔</div>
+      <div id="sgResultText" style="color:var(--red)"></div>
+      <button class="savegame-close-btn" onclick="closeSaveGame()">✔ CHIUDI</button>
+    </div>
+  </div>
+</div>
+
 <!-- MINIGIOCO PASTO -->
 <div id="feedGameOverlay">
   <div class="feedgame-box">
@@ -1787,6 +1987,7 @@ let isAnimating = false;
 let animInterval = null;
 let isSleeping = false;
 let isDead = false;
+let isDying = false;
 
 function drawFerret(sleeping = false, happy = false, sad = false, dead = false) {
   ctx.clearRect(0, 0, 60, 54);
@@ -1854,7 +2055,7 @@ function startAnim() {
 // ─────────────── STATO ───────────────
 let petState = {
   hunger: 80, energy: 70, fun: 60, clean: 90, mood: 75,
-  sleeping: false, dead: false, lastUpdate: Date.now()
+  sleeping: false, dead: false, dying: false, lastUpdate: Date.now()
 };
 
 const EMOTIONS = {
@@ -1869,10 +2070,12 @@ const EMOTIONS = {
   sick:       { emoji: '🤒', label: 'MALATO' },
   sleeping:   { emoji: '💤', label: 'DORME' },
   dead:       { emoji: '💀', label: 'MORTO' },
+  dying:      { emoji: '🚨', label: 'IN PERICOLO!' },
 };
 
 function calcEmotion(s) {
   if (s.dead) return 'dead';
+  if (s.dying) return 'dying';
   if (s.sleeping) return 'sleeping';
   if (s.sick) return 'sick';
   const avg = (s.hunger + s.energy + s.fun + s.clean + s.mood) / 5;
@@ -1906,7 +2109,9 @@ function updateUI(s) {
   document.getElementById('emoBubble').textContent = EMOTIONS[emo].emoji;
   isSleeping = s.sleeping;
   isDead = s.dead;
+  isDying = !!s.dying && !s.dead;
   document.getElementById('deadOverlay').style.display = s.dead ? 'flex' : 'none';
+  document.getElementById('dyingOverlay').style.display = isDying ? 'flex' : 'none';
   // Sick badge e screen glow
   const sickBadge = document.getElementById('sickBadge');
   const petScreen = document.getElementById('petScreen');
@@ -1964,9 +2169,10 @@ function applyDecay(s) {
     newS[k] = Math.max(0, Math.min(100, newS[k]));
   }
 
-  // Morte se troppo tutto a 0
+  // Stato critico: invece di morire subito, entra "in pericolo" — c'è una chance
+  // di salvarlo col minigioco di rianimazione. Solo se il minigioco viene perso, muore.
   const avg = (newS.hunger + newS.energy + newS.fun + newS.clean + newS.mood) / 5;
-  if (avg < 5 && !newS.dead) newS.dead = true;
+  if (avg < 5 && !newS.dead && !newS.dying) newS.dying = true;
 
   return newS;
 }
@@ -2021,6 +2227,10 @@ const ACTIONS = {
 };
 
 window.doAction = function(action) {
+  if (isDying) {
+    showNotif('🚨 Pan sta per morire! Salvalo con il minigioco prima di fare altro!');
+    return;
+  }
   if (isDead && action !== 'medicine') {
     showNotif('💀 Pan è morto! Dagli le medicine!');
     return;
@@ -2053,7 +2263,13 @@ window.doAction = function(action) {
   let newState = { ...petState, lastUpdate: Date.now() };
 
   if (action === 'sleep') {
-    newState.sleeping = !petState.sleeping;
+    const goingToSleep = !petState.sleeping;
+    const energyFull = Math.round(petState.energy || 0) >= 100;
+    if (goingToSleep && energyFull && !isSleepHours()) {
+      showNotif('⚡ Pan ha troppa energia per dormire ora!');
+      return;
+    }
+    newState.sleeping = goingToSleep;
     showNotif(newState.sleeping ? '💤 Pan sta dormendo...' : '☀️ Pan si è svegliato!');
   } else {
     if (petState.sleeping && action !== 'medicine') {
@@ -2190,6 +2406,15 @@ function escapeHtml(str) {
 let autoSleptToday = false;
 let autoWokeToday = false;
 
+// Vero se siamo nella fascia orario notturna (19:30 - 07:30)
+function isSleepHours() {
+  const now = new Date();
+  const totalMin = now.getHours() * 60 + now.getMinutes();
+  const sleepMin = 19 * 60 + 30; // 19:30
+  const wakeMin  = 7  * 60 + 30; // 07:30
+  return totalMin >= sleepMin || totalMin < wakeMin;
+}
+
 function checkAutoSleep() {
   const now = new Date();
   const h = now.getHours();
@@ -2247,6 +2472,7 @@ checkAutoSleep(); // Controlla subito al caricamento
 
 // ─────────────── MENU SELEZIONE GIOCHI ───────────────
 window.openGameSelect = function() {
+  if (isDying) { showNotif('🚨 Pan sta per morire! Salvalo prima con il minigioco!'); return; }
   if (isDead) { showNotif('💀 Pan è morto! Dagli le medicine!'); return; }
   if (petState && petState.sleeping) { showNotif('😴 Pan sta dormendo!'); return; }
   document.getElementById('gameSelectOverlay').classList.add('active');
@@ -3283,6 +3509,158 @@ window.closeFeedGame = function() {
 };
 
 window.openFeedGame = openFeedGame;
+
+// ─────────────── MINIGIOCO RIANIMA PAN (CPR) ───────────────
+// Quando Pan è in pericolo di vita, invece di morire subito si apre
+// una chance di salvarlo: bisogna premere ❤️ ORA! mentre la barra
+// (che si muove avanti e indietro) è dentro la zona verde.
+// 5 tentativi, ne bastano 3 corretti per salvarlo. Se non si raggiungono, Pan muore
+// (e torna come oggi: bisogna dargli le medicine per rianimarlo).
+
+const SG_ROUNDS = 5;
+const SG_NEED = 3;
+const SG_ZONE_WIDTH = 26; // % della barra
+const SG_PERIOD = 1500;   // ms per un ciclo avanti+indietro completo
+const SG_ROUND_TIMEOUT = 3000; // ms massimi per tentativo prima che conti come fallito
+
+let sgRound = 0, sgScore = 0, sgDone = false;
+let sgZoneStart = 0, sgRoundStart = 0, sgAnimId = null, sgRoundTimer = null, sgAwaitingTap = false;
+
+function openSaveGame() {
+  sgRound = 0; sgScore = 0; sgDone = false; sgAwaitingTap = false;
+  document.getElementById('sgResult').classList.remove('show');
+  document.getElementById('sgTapBtn').style.display = '';
+  document.getElementById('sgBarTrack').style.display = '';
+  document.getElementById('sgScore').textContent = '0';
+  document.getElementById('saveGameOverlay').classList.add('active');
+  _sgNextRound();
+}
+
+function _sgMarkerPos(elapsedMs) {
+  const half = SG_PERIOD / 2;
+  const t = elapsedMs % SG_PERIOD;
+  return t < half ? (t / half) * 100 : 100 - ((t - half) / half) * 100;
+}
+
+function _sgNextRound() {
+  if (sgRound >= SG_ROUNDS) { _sgFinish(); return; }
+  sgRound++;
+  sgAwaitingTap = true;
+
+  // Zona verde casuale (lasciando un margine ai bordi della barra)
+  sgZoneStart = 5 + Math.random() * (100 - SG_ZONE_WIDTH - 10);
+  const zoneEl = document.getElementById('sgZone');
+  zoneEl.style.left = sgZoneStart + '%';
+  zoneEl.style.width = SG_ZONE_WIDTH + '%';
+
+  document.getElementById('sgRoundInfo').textContent = `TENTATIVO ${sgRound}/${SG_ROUNDS}`;
+  document.getElementById('sgStatus').textContent = 'Premi ❤️ nella zona verde!';
+  document.getElementById('sgScore').textContent = `${sgScore}/${sgRound - 1}`;
+
+  sgRoundStart = performance.now();
+  cancelAnimationFrame(sgAnimId);
+  sgAnimId = requestAnimationFrame(_sgAnimLoop);
+
+  clearTimeout(sgRoundTimer);
+  sgRoundTimer = setTimeout(() => {
+    if (sgAwaitingTap) _sgResolveRound(false);
+  }, SG_ROUND_TIMEOUT);
+}
+
+function _sgAnimLoop(now) {
+  const elapsed = now - sgRoundStart;
+  const pos = _sgMarkerPos(elapsed);
+  const marker = document.getElementById('sgMarker');
+  if (marker) marker.style.left = pos + '%';
+  if (sgAwaitingTap) sgAnimId = requestAnimationFrame(_sgAnimLoop);
+}
+
+window.sgTap = function() {
+  if (!sgAwaitingTap) return;
+  const elapsed = performance.now() - sgRoundStart;
+  const pos = _sgMarkerPos(elapsed);
+  const hit = pos >= sgZoneStart && pos <= sgZoneStart + SG_ZONE_WIDTH;
+  _sgResolveRound(hit);
+};
+
+function _sgResolveRound(hit) {
+  sgAwaitingTap = false;
+  clearTimeout(sgRoundTimer);
+  cancelAnimationFrame(sgAnimId);
+
+  if (hit) {
+    sgScore++;
+    document.getElementById('sgStatus').textContent = '💓 BATTITO STABILE!';
+  } else {
+    document.getElementById('sgStatus').textContent = '⚠️ FUORI RITMO!';
+  }
+  document.getElementById('sgScore').textContent = `${sgScore}/${sgRound}`;
+
+  setTimeout(() => _sgNextRound(), 700);
+}
+
+function _sgFinish() {
+  sgDone = true;
+  document.getElementById('sgTapBtn').style.display = 'none';
+  document.getElementById('sgBarTrack').style.display = 'none';
+
+  const won = sgScore >= SG_NEED;
+  const nick = document.getElementById('nickInput').value.trim() || 'Anonimo';
+
+  if (won) {
+    document.getElementById('sgResultEmoji').textContent = '💓';
+    document.getElementById('sgResultText').innerHTML =
+      `${sgScore}/${SG_ROUNDS} CORRETTI<br>IL CUORE DI PAN RIPARTE!`;
+    document.getElementById('sgStatus').textContent = '';
+
+    const newState = {
+      ...petState,
+      dying: false,
+      dead: false,
+      sick: false,
+      mood:   Math.max(petState.mood   || 0, 30),
+      hunger: Math.max(petState.hunger || 0, 30),
+      energy: Math.max(petState.energy || 0, 30),
+      lastUpdate: Date.now()
+    };
+    petState = newState;
+    set(petRef, newState);
+    startAnim();
+
+    pushChatMsg('🤖 Sistema', `💓 ${nick} ha salvato Pan appena in tempo! [${sgScore}/${SG_ROUNDS}]`, 'system');
+    showNotif('💓 Pan è salvo!');
+  } else {
+    document.getElementById('sgResultEmoji').textContent = '💔';
+    document.getElementById('sgResultText').innerHTML =
+      `${sgScore}/${SG_ROUNDS} CORRETTI<br>NON È STATO POSSIBILE SALVARLO...`;
+    document.getElementById('sgStatus').textContent = '';
+
+    const newState = {
+      ...petState,
+      dying: false,
+      dead: true,
+      lastUpdate: Date.now()
+    };
+    petState = newState;
+    set(petRef, newState);
+    startAnim();
+
+    pushChatMsg('🤖 Sistema', `💔 Non è stato possibile salvare Pan... [${sgScore}/${SG_ROUNDS}] Dategli le medicine per rianimarlo!`, 'system');
+    showNotif('💀 Pan non è stato salvato...');
+  }
+
+  document.getElementById('sgResult').classList.add('show');
+}
+
+window.closeSaveGame = function() {
+  document.getElementById('saveGameOverlay').classList.remove('active');
+  sgAwaitingTap = false;
+  sgDone = true;
+  clearTimeout(sgRoundTimer);
+  cancelAnimationFrame(sgAnimId);
+};
+
+window.openSaveGame = openSaveGame;
 
 </script>
 </body>
